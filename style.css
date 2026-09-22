@@ -1,3 +1,9 @@
+@font-face {
+  font-family: "Equestria Display";
+  src: url("Equestria-4.otf") format("opentype");
+  font-display: swap;
+}
+
 :root {
   color-scheme: dark;
   --ink: #081731;
@@ -22,30 +28,26 @@ button { color: inherit; }
 
 a { color: inherit; }
 
-.backdrop {
-  position: fixed;
-  inset: -4vmax;
-  background: linear-gradient(rgba(4, 17, 45, .2), rgba(4, 17, 45, .48)), url("map.png") center / cover;
-  filter: blur(22px) saturate(.85);
-  transform: scale(1.04);
-}
-
 .atlas {
   position: fixed;
   inset: 0;
-  display: grid;
-  place-items: center;
+  overflow: hidden;
   isolation: isolate;
 }
 
 .map {
-  position: relative;
-  width: min(100vw, 160vh);
+  --map-x: 0px;
+  --map-y: 0px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: max(105vw, 168vh);
   aspect-ratio: 8 / 5;
-  max-height: 100vh;
   background: url("map.png") center / 100% 100% no-repeat;
   box-shadow: 0 0 80px rgba(0, 0, 0, .42);
   overflow: hidden;
+  transform: translate(calc(-50% + var(--map-x)), calc(-50% + var(--map-y)));
+  will-change: transform;
 }
 
 .map::after {
@@ -70,13 +72,10 @@ a { color: inherit; }
   text-shadow: 0 2px 9px rgba(0, 0, 0, .42);
 }
 
-.masthead p,
 .masthead h1,
 .masthead span { margin: 0; }
 
-.masthead p { color: var(--gold); font: 700 clamp(7px, .68vw, 12px)/1.2 Arial, sans-serif; letter-spacing: .24em; }
-
-.masthead h1 { margin: .22em 0 .1em; font-size: clamp(17px, 2.2vw, 42px); font-weight: 500; letter-spacing: .03em; }
+.masthead h1 { margin: 0 0 .1em; font: 500 clamp(19px, 2.4vw, 46px)/1.05 "Equestria Display", Georgia, serif; letter-spacing: .03em; }
 
 .masthead span { display: block; opacity: .84; font: clamp(8px, .78vw, 14px)/1.4 Arial, "Microsoft YaHei", sans-serif; letter-spacing: .06em; }
 
@@ -151,8 +150,7 @@ a { color: inherit; }
   transition: transform .24s, background .24s, border-color .24s;
 }
 
-.place-card strong { font-size: clamp(10px, 1.05vw, 18px); font-weight: 600; white-space: nowrap; }
-.place-card small { margin-left: .35em; color: var(--gold); font-family: Arial, "Microsoft YaHei", sans-serif; font-size: .65em; font-weight: 500; }
+.place-card strong { font: 600 clamp(12px, 1.2vw, 21px)/1 "Equestria Display", Georgia, serif; letter-spacing: .02em; white-space: nowrap; }
 .place-card > span { margin-top: 2px; font: clamp(7px, .7vw, 12px)/1.3 Arial, "Microsoft YaHei", sans-serif; opacity: .9; }
 .place-card em { max-height: 0; margin-top: 0; overflow: hidden; color: var(--gold); font: 700 clamp(7px, .65vw, 11px)/1.35 Arial, "Microsoft YaHei", sans-serif; font-style: normal; opacity: 0; transition: max-height .2s, margin .2s, opacity .2s; }
 
@@ -205,7 +203,7 @@ a { color: inherit; }
 .compass:focus-visible::before { border-color: var(--gold); background: rgba(255, 225, 124, .13); transform: scale(1.08); }
 .compass span, .compass strong { position: relative; margin-left: 42%; width: max-content; max-width: 145%; }
 .compass span { font: clamp(7px, .65vw, 11px)/1.2 Arial, "Microsoft YaHei", sans-serif; }
-.compass strong { color: var(--gold); font: 700 clamp(8px, .78vw, 13px)/1.3 Arial, sans-serif; letter-spacing: .08em; }
+.compass strong { color: var(--gold); font: 700 clamp(9px, .88vw, 15px)/1.3 "Equestria Display", Arial, sans-serif; letter-spacing: .08em; }
 
 .credits {
   position: absolute;
@@ -228,19 +226,6 @@ a { color: inherit; }
 .credits a:hover,
 .credits button:hover { color: var(--gold); opacity: 1; }
 .credits > * + * { border-left: 1px solid rgba(255, 255, 255, .32); padding-left: clamp(7px, 1vw, 18px); }
-
-.hint {
-  position: absolute;
-  z-index: 4;
-  left: 50%;
-  bottom: 2.8%;
-  margin: 0;
-  transform: translateX(-50%);
-  font: clamp(7px, .63vw, 11px)/1 Arial, "Microsoft YaHei", sans-serif;
-  letter-spacing: .12em;
-  text-shadow: 0 2px 7px rgba(0, 0, 0, .8);
-  opacity: .68;
-}
 
 .sheet {
   width: min(920px, calc(100vw - 32px));
@@ -274,6 +259,9 @@ a { color: inherit; }
 .sheet-head h2 { margin: 7px 0 8px; color: var(--paper); font-size: clamp(28px, 4vw, 48px); font-weight: 500; }
 .sheet-head p { max-width: 680px; color: rgba(255, 255, 255, .76); font: 14px/1.6 Arial, "Microsoft YaHei", sans-serif; }
 .eyebrow { color: var(--gold); font: 700 10px/1 Arial, sans-serif; letter-spacing: .2em; }
+html[lang="en"] .sheet-head h2,
+html[lang="en"] .sheet-body h3,
+html[lang="en"] .eyebrow { font-family: "Equestria Display", Georgia, serif; }
 .close { flex: 0 0 auto; width: 42px; height: 42px; border: 1px solid rgba(255, 255, 255, .42); border-radius: 50%; background: rgba(0, 0, 0, .12); font: 28px/1 Arial, sans-serif; cursor: pointer; }
 .close:hover { color: var(--gold); border-color: var(--gold); transform: rotate(4deg); }
 
@@ -321,6 +309,7 @@ a { color: inherit; }
 .privacy-sheet { width: min(680px, calc(100vw - 32px)); }
 .prose p { margin: 0; color: rgba(255, 255, 255, .78); font: 15px/1.8 Arial, "Microsoft YaHei", sans-serif; }
 .prose p + p { margin-top: 1em; }
+.prose a { color: var(--gold); text-underline-offset: 3px; }
 
 .toast {
   position: fixed;
@@ -344,16 +333,14 @@ a { color: inherit; }
 @media (max-aspect-ratio: 5 / 4) {
   body { height: 100svh; overflow-x: auto; overflow-y: hidden; }
   .atlas { position: relative; display: block; width: max(160svh, 920px); height: 100svh; overflow: hidden; }
-  .map { width: 100%; height: 100%; max-height: none; }
-  .backdrop { display: none; }
+  .map { position: relative; top: 0; left: 0; width: 100%; height: 100%; transform: none; }
   .masthead { position: fixed; top: 12px; left: 12px; }
   .language { position: fixed; top: 12px; right: 12px; }
   .credits { position: fixed; right: 12px; bottom: 12px; }
-  .hint { display: none; }
 }
 
 @media (max-width: 680px) {
-  .masthead span, .masthead p { display: none; }
+  .masthead span { display: none; }
   .masthead h1 { margin: 0; font-size: 16px; }
   .language { min-width: 60px; padding: 8px 10px; }
   .credits { gap: 6px; max-width: calc(100vw - 24px); overflow-x: auto; font-size: 8px; }

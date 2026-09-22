@@ -23,9 +23,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/configure-pages@v5
+      - name: Test
+        run: node --test
+      - name: Prepare static site
+        run: |
+          mkdir -p _site/en
+          cp index.html style.css app.js map.png Equestria-4.otf cm.jpg _site/
+          cp index.html _site/en/index.html
+          touch _site/.nojekyll
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: .
+          path: _site
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4
