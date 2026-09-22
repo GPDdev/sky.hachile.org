@@ -12,6 +12,11 @@ export function languageForPath(pathname) {
   return /^\/en(?:\/|$)/.test(pathname) ? "en" : "zh";
 }
 
+export function mobileRoute(pathname, isMobile) {
+  if (!isMobile || /^\/m(?:\/|$)/.test(pathname)) return null;
+  return languageForPath(pathname) === "en" ? "/m/en/" : "/m/";
+}
+
 export const MAP_WIDTH = 1920;
 export const MAP_HEIGHT = 1200;
 
@@ -32,6 +37,11 @@ export function clampPan(x, y, scale, width, height) {
 }
 
 if (typeof document !== "undefined") {
+  const isMobile = navigator.userAgentData?.mobile
+    ?? matchMedia("(max-width: 760px) and (pointer: coarse)").matches;
+  const targetRoute = mobileRoute(location.pathname, isMobile);
+  if (targetRoute) location.replace(targetRoute);
+
   const languageButton = document.querySelector(".language");
   const viewport = document.querySelector(".map-viewport");
   const world = document.querySelector(".map-world");

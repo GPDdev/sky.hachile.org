@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { clampPan, fitCoverScale, languageForPath, normalizeLanguage, translatedText } from "./app.js";
+import { clampPan, fitCoverScale, languageForPath, mobileRoute, normalizeLanguage, translatedText } from "./app.js";
 
 test("language helpers always return a complete supported translation", () => {
   const copy = { zh: "中心城", en: "Canterlot" };
@@ -15,6 +15,13 @@ test("English has its own route", () => {
   assert.equal(languageForPath("/"), "zh");
   assert.equal(languageForPath("/en"), "en");
   assert.equal(languageForPath("/en/"), "en");
+});
+
+test("phones use the matching mobile language route", () => {
+  assert.equal(mobileRoute("/", true), "/m/");
+  assert.equal(mobileRoute("/en/", true), "/m/en/");
+  assert.equal(mobileRoute("/", false), null);
+  assert.equal(mobileRoute("/m/en/", true), null);
 });
 
 test("map fills its viewport and cannot be dragged beyond an edge", () => {

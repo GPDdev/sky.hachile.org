@@ -1,0 +1,58 @@
+@font-face {
+  font-family: "Equestria Display";
+  src: url("Equestria-4.otf") format("opentype");
+  font-display: swap;
+}
+
+:root { color-scheme: dark; font-family: Arial, "Microsoft YaHei", sans-serif; }
+* { box-sizing: border-box; }
+html { min-height: 100%; background: #102b52; }
+body {
+  min-height: 100svh;
+  margin: 0;
+  color: white;
+  background:
+    linear-gradient(180deg, rgba(7, 24, 55, .18), #0b2247 37rem),
+    url("map.png") 40% top / auto 42rem no-repeat;
+}
+a { color: inherit; }
+button { color: inherit; font: inherit; }
+
+.hero { position: relative; min-height: 25rem; padding: 5.7rem 1.25rem 2rem; text-shadow: 0 2px 12px #061b3d; }
+.hero::after { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(5, 20, 49, .2), rgba(11, 34, 71, .92)); }
+.language { position: absolute; top: 1rem; right: 1rem; padding: .65rem .85rem; border: 1px solid rgba(255,255,255,.55); border-radius: 999px; background: rgba(7,28,66,.78); text-decoration: none; }
+.language b { color: #ffe17c; }
+.eyebrow { margin: 0 0 .6rem; color: #ffe17c; font-size: .68rem; font-weight: 700; letter-spacing: .18em; }
+.hero h1 { max-width: 21rem; margin: 0; font: 500 clamp(2.35rem, 13vw, 4rem)/.95 "Equestria Display", Georgia, serif; letter-spacing: .03em; }
+.hero > p:last-child { max-width: 20rem; margin: 1rem 0 0; color: rgba(255,255,255,.8); font-size: .86rem; line-height: 1.6; }
+
+main { position: relative; z-index: 1; max-width: 34rem; margin: -2.5rem auto 0; padding: 0 1rem 2rem; }
+.routes { display: grid; gap: .7rem; }
+.route { border: 1px solid rgba(255,255,255,.24); border-radius: .35rem 1.15rem .35rem 1.15rem; background: linear-gradient(135deg, rgba(17,54,102,.95), rgba(20,66,114,.8)); box-shadow: 0 .7rem 1.8rem rgba(2,13,33,.22); overflow: hidden; }
+a.route, .route summary { display: grid; grid-template-columns: 2.2rem 1fr auto; align-items: center; gap: .8rem; min-height: 5rem; padding: 1rem; text-decoration: none; }
+.route summary { cursor: pointer; list-style: none; }
+.route summary::-webkit-details-marker { display: none; }
+.number { color: #ffe17c; font: 700 .68rem/1 monospace; }
+.route span:nth-child(2) { display: grid; gap: .24rem; min-width: 0; }
+.route span > b { font: 500 1.45rem/1 "Equestria Display", Georgia, serif; letter-spacing: .025em; }
+.route small { color: rgba(255,255,255,.68); font-size: .72rem; }
+.route i { color: #ffe17c; font-size: 1.25rem; font-style: normal; }
+.featured { border-color: rgba(255,225,124,.68); }
+.route-body { display: grid; gap: .55rem; padding: 0 1rem 1rem 4rem; }
+.route-body p { margin: 0 0 .2rem; color: #ffe17c; font-size: .68rem; letter-spacing: .08em; }
+.route-body button, .route-body > a { display: flex; justify-content: space-between; gap: .7rem; width: 100%; padding: .7rem; border: 1px solid rgba(255,255,255,.16); border-radius: .45rem; background: rgba(255,255,255,.06); text-align: left; text-decoration: none; }
+.route-body button b, .route-body > a b { flex: 0 0 auto; color: #ffe17c; font: .68rem/1.4 monospace; }
+.route-body button span { font-size: .73rem; line-height: 1.4; }
+.friends { display: grid; gap: .35rem; margin-top: .25rem; }
+.friends a { color: rgba(255,255,255,.8); font-size: .75rem; text-underline-offset: .2rem; }
+
+.privacy { margin-top: 1.6rem; padding: 1rem; border-top: 1px solid rgba(255,255,255,.2); color: rgba(255,255,255,.66); font-size: .75rem; line-height: 1.7; }
+.privacy summary { color: white; cursor: pointer; }
+.privacy a { color: #ffe17c; }
+footer { padding: 0 1rem 2rem; color: rgba(255,255,255,.55); font-size: .7rem; text-align: center; }
+footer a { color: white; }
+.toast { position: fixed; z-index: 10; left: 50%; bottom: 1.2rem; padding: .7rem 1rem; border: 1px solid rgba(255,255,255,.35); border-radius: 999px; background: rgba(5,24,58,.96); font-size: .78rem; opacity: 0; pointer-events: none; transform: translate(-50%, .7rem); transition: .2s; }
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+@media (min-width: 700px) { body { background-size: cover; } }
+@media (prefers-reduced-motion: reduce) { * { transition-duration: .01ms !important; } }
