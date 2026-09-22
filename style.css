@@ -35,22 +35,34 @@ a { color: inherit; }
   isolation: isolate;
 }
 
-.map {
-  --map-x: 0px;
-  --map-y: 0px;
+.map-viewport {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  width: max(105vw, 168vh);
-  aspect-ratio: 8 / 5;
+  inset: 0;
+  overflow: hidden;
+  background: #091934;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+
+.map-viewport.dragging { cursor: grabbing; }
+
+.map-viewport:focus-visible { outline: 2px solid var(--gold); outline-offset: -2px; }
+
+.map-world {
+  --marker-scale: 1;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1920px;
+  height: 1200px;
   background: url("map.png") center / 100% 100% no-repeat;
   box-shadow: 0 0 80px rgba(0, 0, 0, .42);
-  overflow: hidden;
-  transform: translate(calc(-50% + var(--map-x)), calc(-50% + var(--map-y)));
+  transform-origin: 0 0;
   will-change: transform;
 }
 
-.map::after {
+.map-world::after {
   content: "";
   position: absolute;
   inset: 0;
@@ -61,8 +73,8 @@ a { color: inherit; }
 .masthead {
   position: absolute;
   z-index: 5;
-  top: 3.4%;
-  left: 3.4%;
+  top: clamp(12px, 3.4vw, 52px);
+  left: clamp(12px, 3.4vw, 52px);
   padding: clamp(10px, 1.2vw, 20px) clamp(13px, 1.6vw, 26px);
   border: 1px solid rgba(255, 255, 255, .46);
   border-radius: 3px 18px 3px 18px;
@@ -82,8 +94,8 @@ a { color: inherit; }
 .language {
   position: absolute;
   z-index: 20;
-  top: 3.6%;
-  right: 3.2%;
+  top: clamp(12px, 3.4vw, 52px);
+  right: clamp(12px, 3.2vw, 49px);
   min-width: clamp(68px, 6vw, 112px);
   padding: clamp(7px, .8vw, 13px) clamp(10px, 1vw, 17px);
   border: 1px solid rgba(255, 255, 255, .62);
@@ -114,6 +126,8 @@ a { color: inherit; }
   text-align: left;
   text-decoration: none;
   filter: drop-shadow(0 3px 7px rgba(5, 16, 35, .45));
+  transform: translate(-50%, -50%) scale(var(--marker-scale));
+  transform-origin: center;
 }
 
 .place-glow {
@@ -177,17 +191,19 @@ a { color: inherit; }
 .compass {
   position: absolute;
   z-index: 8;
-  left: 1.1%;
-  bottom: 3.7%;
+  left: 21px;
+  bottom: 44px;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  width: 14%;
+  width: 200px;
   aspect-ratio: 1;
-  padding: 0 0 1.5% 1.5%;
+  padding: 0 0 18px 22px;
   color: white;
   text-decoration: none;
   text-shadow: 0 2px 6px rgba(0, 0, 0, .75);
+  transform: scale(var(--marker-scale));
+  transform-origin: left bottom;
 }
 
 .compass::before {
@@ -208,8 +224,8 @@ a { color: inherit; }
 .credits {
   position: absolute;
   z-index: 10;
-  right: 2.4%;
-  bottom: 2.4%;
+  right: clamp(12px, 2.4vw, 37px);
+  bottom: clamp(12px, 2.4vw, 37px);
   display: flex;
   align-items: center;
   gap: clamp(7px, 1vw, 18px);
@@ -329,15 +345,6 @@ html[lang="en"] .eyebrow { font-family: "Equestria Display", Georgia, serif; }
   transition: opacity .2s, transform .2s;
 }
 .toast.show { opacity: 1; transform: translate(-50%, 0); }
-
-@media (max-aspect-ratio: 5 / 4) {
-  body { height: 100svh; overflow-x: auto; overflow-y: hidden; }
-  .atlas { position: relative; display: block; width: max(160svh, 920px); height: 100svh; overflow: hidden; }
-  .map { position: relative; top: 0; left: 0; width: 100%; height: 100%; transform: none; }
-  .masthead { position: fixed; top: 12px; left: 12px; }
-  .language { position: fixed; top: 12px; right: 12px; }
-  .credits { position: fixed; right: 12px; bottom: 12px; }
-}
 
 @media (max-width: 680px) {
   .masthead span { display: none; }

@@ -13,16 +13,8 @@
 </head>
 <body>
   <main class="atlas" aria-label="Skyblue 的小马国导航地图">
-    <div class="map" role="img" aria-label="小马国地图，标出了通往 Skyblue 各类信息的城市">
-      <header class="masthead">
-        <h1 data-zh="Welcome to my Wonderland" data-en="Welcome to my Wonderland">Welcome to my Wonderland</h1>
-        <span data-zh="选择一座城市，开始探索" data-en="Choose a city and begin exploring">选择一座城市，开始探索</span>
-      </header>
-
-      <button class="language" type="button" aria-label="Switch to English">
-        <span class="language-current">中</span><span aria-hidden="true"> / </span><span class="language-next">EN</span>
-      </button>
-
+    <div class="map-viewport" tabindex="0" role="application" aria-label="可缩放、可拖动的小马国地图">
+      <div class="map-world" role="img" aria-label="小马国地图，标出了通往 Skyblue 各类信息的城市">
       <a class="place place-canterlot" href="https://hachile.org" aria-label="Canterlot 中心城：网站交通枢纽">
         <span class="place-glow" aria-hidden="true"></span>
         <span class="place-dot" aria-hidden="true"></span>
@@ -67,12 +59,22 @@
         <span data-zh="寻找附近的小马迷" data-en="Find nearby bronies">寻找附近的小马迷</span>
         <strong>BRONYMAP ↗</strong>
       </a>
-
-      <footer class="credits">
-        <span>Powered by <a href="https://github.com/GPDdev">GPDdev</a></span>
-        <button type="button" data-dialog="privacy-dialog" data-zh="隐私政策" data-en="Privacy">隐私政策</button>
-      </footer>
+      </div>
     </div>
+
+    <header class="masthead">
+      <h1 data-zh="Welcome to my Wonderland" data-en="Welcome to my Wonderland">Welcome to my Wonderland</h1>
+      <span data-zh="选择一座城市，开始探索" data-en="Choose a city and begin exploring">选择一座城市，开始探索</span>
+    </header>
+
+    <button class="language" type="button" aria-label="Switch to English">
+      <span class="language-current">中</span><span aria-hidden="true"> / </span><span class="language-next">EN</span>
+    </button>
+
+    <footer class="credits">
+      <span>Powered by <a href="https://github.com/GPDdev">GPDdev</a></span>
+      <button type="button" data-dialog="privacy-dialog" data-zh="隐私政策" data-en="Privacy">隐私政策</button>
+    </footer>
   </main>
 
   <dialog id="ponyville-dialog" class="sheet">

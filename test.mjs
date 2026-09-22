@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { languageForPath, normalizeLanguage, parallaxOffset, translatedText } from "./app.js";
+import { clampPan, fitCoverScale, languageForPath, normalizeLanguage, translatedText } from "./app.js";
 
 test("language helpers always return a complete supported translation", () => {
   const copy = { zh: "中心城", en: "Canterlot" };
@@ -11,11 +11,15 @@ test("language helpers always return a complete supported translation", () => {
   assert.equal(translatedText(copy, "fr"), "中心城");
 });
 
-test("English has its own route and parallax stays subtle", () => {
+test("English has its own route", () => {
   assert.equal(languageForPath("/"), "zh");
   assert.equal(languageForPath("/en"), "en");
   assert.equal(languageForPath("/en/"), "en");
-  assert.equal(parallaxOffset(0, 100), -10);
-  assert.equal(parallaxOffset(50, 100), 0);
-  assert.equal(parallaxOffset(100, 100), 10);
+});
+
+test("map fills its viewport and cannot be dragged beyond an edge", () => {
+  assert.equal(fitCoverScale(1920, 1200), 1);
+  assert.equal(fitCoverScale(1600, 900), 1600 / 1920);
+  assert.equal(fitCoverScale(390, 844), 844 / 1200);
+  assert.deepEqual(clampPan(50, -999, 1, 800, 600), { x: 0, y: -600 });
 });
