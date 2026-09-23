@@ -179,6 +179,10 @@ a { color: inherit; }
 .place:hover .place-card em,
 .place:focus-visible .place-card em { max-height: 2em; margin-top: 5px; opacity: 1; }
 
+.place-featured .place-glow { opacity: 1; transform: scale(1.2); background: radial-gradient(circle, rgba(255, 159, 202, .62), rgba(255, 225, 124, .22) 42%, transparent 70%); }
+.place-featured .place-dot { background: var(--pink); box-shadow: 0 0 0 4px rgba(255, 225, 124, .82), 0 0 22px rgba(255, 159, 202, .95); }
+.place-featured .place-card { border-color: var(--gold); box-shadow: 0 10px 28px rgba(255, 159, 202, .25); }
+
 .place-canterlot { left: 38.6%; top: 47.2%; }
 .place-canterlot .place-card { left: 34px; top: -18px; }
 .place-ponyville { left: 34.5%; top: 57.1%; }
@@ -187,6 +191,8 @@ a { color: inherit; }
 .place-manehattan .place-card { right: 32px; top: -18px; }
 .place-cloudsdale { left: 32.2%; top: 39.3%; }
 .place-cloudsdale .place-card { right: 30px; bottom: 23px; }
+.place-vanhoover { left: 11.5%; top: 38.4%; }
+.place-vanhoover .place-card { left: 32px; top: -18px; }
 .place-ruins { left: 42%; top: 64.7%; }
 .place-ruins .place-card { left: 32px; top: 12px; }
 .place-applewood { left: 16.5%; top: 72.4%; }
@@ -290,6 +296,8 @@ html[lang="en"] .eyebrow { font-family: "Equestria Display", Georgia, serif; }
 .friends i { color: var(--gold); font-style: normal; }
 
 .compact { width: min(760px, calc(100vw - 32px)); }
+.profile-sheet { width: min(800px, calc(100vw - 32px)); }
+.profile-sheet .sheet-head { background: linear-gradient(135deg, rgba(75, 49, 118, .98), rgba(18, 67, 118, .96)); }
 .contact-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
 .contact-grid > * { display: grid !important; grid-template-columns: 1fr auto; }
 .contact-grid span { grid-column: 1 / -1; color: var(--gold); font: 10px/1.2 Arial, sans-serif; letter-spacing: .13em; text-transform: uppercase; }
