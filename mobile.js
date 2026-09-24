@@ -5,6 +5,9 @@ const toast = document.querySelector(".toast");
 let toastTimer;
 
 document.documentElement.lang = english ? "en" : "zh-CN";
+document.querySelector(".route-canterlot").href = english
+  ? "https://home.hachile.org/en/"
+  : "https://home.hachile.org/";
 document.querySelectorAll("[data-zh][data-en]").forEach((element) => {
   element.textContent = element.dataset[language];
 });

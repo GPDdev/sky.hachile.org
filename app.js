@@ -74,6 +74,9 @@ if (typeof document !== "undefined") {
   function setLanguage(nextLanguage) {
     language = normalizeLanguage(nextLanguage);
     document.documentElement.lang = language === "zh" ? "zh-CN" : "en";
+    document.querySelector(".place-canterlot").href = language === "en"
+      ? "https://home.hachile.org/en/"
+      : "https://home.hachile.org/";
     document.querySelectorAll("[data-zh][data-en]").forEach((element) => {
       element.textContent = translatedText(element.dataset, language);
     });
