@@ -28,7 +28,7 @@ jobs:
       - name: Prepare static site
         run: |
           mkdir -p _site/en _site/m/en
-          cp index.html style.css app.js mobile.css mobile.js map.png Equestria-4.otf cm.jpg _site/
+          cp index.html style.css app.js mobile.css mobile.js map.png Equestria-4.otf favicon.png _site/
           cp index.html _site/en/index.html
           cp mobile.html _site/m/index.html
           cp mobile.html _site/m/en/index.html
