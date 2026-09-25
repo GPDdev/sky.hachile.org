@@ -197,6 +197,8 @@ a { color: inherit; }
 .place-ruins .place-card { left: 32px; top: 12px; }
 .place-applewood { left: 16.5%; top: 72.4%; }
 .place-applewood .place-card { left: 32px; top: -18px; }
+.place-baltimare { left: 65.2%; top: 63.1%; }
+.place-baltimare .place-card { right: 32px; top: -18px; }
 .place-forbidden-jungle { left: 64.8%; top: 95.3%; }
 .place-forbidden-jungle .place-card { right: 32px; bottom: 23px; }
 
