@@ -172,6 +172,18 @@ if (typeof document !== "undefined") {
     });
   });
 
+  const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
+  function launchTrain() {
+    if (reducedMotion.matches || document.hidden) return;
+    const train = document.createElement("span");
+    train.className = "rail-train";
+    train.addEventListener("animationend", () => train.remove(), { once: true });
+    setTimeout(() => train.remove(), 30000);
+    document.querySelector(".map-ambience").append(train);
+  }
+  setTimeout(launchTrain, 4000);
+  setInterval(launchTrain, 60000);
+
   setLanguage(language);
   resetMap();
 }

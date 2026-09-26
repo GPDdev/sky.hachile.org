@@ -78,6 +78,18 @@ a { color: inherit; }
 .bobbing-boat { width: 130px; transform-origin: 52% 72%; animation: boat-bob 6s ease-in-out infinite; }
 .boat-east { left: 1520px; top: 482px; }
 .boat-south { left: 1215px; top: 765px; width: 135px; animation-delay: -3s; }
+.sea-waves { position: absolute; inset: 0; width: 1920px; height: 1200px; overflow: visible; fill: none; stroke: #cfecf5; stroke-width: 1.5; }
+.sea-waves use { animation: wave-drift 16s linear infinite; }
+.sea-waves use:nth-of-type(3n + 1) { animation-delay: -5s; }
+.sea-waves use:nth-of-type(3n + 2) { animation-delay: -10s; }
+.neighagra-falls { position: absolute; left: 876px; top: 448px; width: 57px; height: 50px; border-radius: 4px 4px 24px 24px; background: repeating-linear-gradient(180deg, transparent 0 9px, rgba(228, 255, 255, .8) 10px 12px, transparent 13px 14px), repeating-linear-gradient(90deg, transparent 0 5px, rgba(219, 255, 255, .5) 6px 8px, transparent 9px 13px); background-size: 100% 14px, 100% 100%; opacity: .55; mix-blend-mode: screen; clip-path: polygon(4% 0, 95% 0, 92% 74%, 100% 94%, 68% 100%, 0 94%, 8% 72%); animation: waterfall-flow .65s linear infinite; }
+.volcano-smoke { position: absolute; left: 1767px; top: 914px; width: 50px; height: 110px; }
+.volcano-smoke i { position: absolute; bottom: 0; left: 10px; width: 24px; height: 19px; border-radius: 50%; background: rgba(220, 242, 247, .73); filter: blur(5px); animation: smoke-rise 7s ease-out infinite; }
+.volcano-smoke i:nth-child(2) { left: 17px; animation-delay: -2.3s; }
+.volcano-smoke i:nth-child(3) { left: 7px; animation-delay: -4.6s; }
+.rail-train { position: absolute; z-index: 2; left: 0; top: 0; width: 38px; height: 14px; border: 2px solid #583556; border-radius: 3px 8px 2px 2px; background: linear-gradient(#f7c476 0 40%, #b94b67 40%); box-shadow: 0 2px 5px #12294d88; offset-path: path("M 790 636 C 815 650 827 655 842 647 C 870 666 892 680 934 678 C 980 680 1017 681 1055 699 C 1076 710 1066 744 1110 749 C 1163 753 1215 751 1280 760"); offset-rotate: auto; offset-anchor: 50% 80%; animation: train-ride 26s linear forwards; }
+.rail-train::before { content: ""; position: absolute; right: 4px; top: -7px; width: 12px; height: 8px; border: 2px solid #583556; border-bottom: 0; border-radius: 3px 3px 0 0; background: #f7d59b; }
+.rail-train::after { content: ""; position: absolute; left: 5px; bottom: -6px; width: 7px; height: 7px; border-radius: 50%; background: #26344b; box-shadow: 19px 0 #26344b; }
 
 @keyframes cloud-drift {
   0% { transform: translateX(-180px); opacity: 0; }
@@ -89,6 +101,10 @@ a { color: inherit; }
   0%, 100% { transform: translate(0, 0) rotate(-1deg); }
   50% { transform: translate(6px, -4px) rotate(1deg); }
 }
+@keyframes wave-drift { 0% { transform: translateX(-25px); opacity: 0; } 18%, 78% { opacity: .5; } 100% { transform: translateX(65px); opacity: 0; } }
+@keyframes waterfall-flow { to { background-position: 0 14px, 0 0; } }
+@keyframes smoke-rise { 0% { transform: translate(0, 0) scale(.7); opacity: 0; } 20% { opacity: .7; } 100% { transform: translate(-38px, -105px) scale(2.1); opacity: 0; } }
+@keyframes train-ride { 0%, 100% { opacity: 0; } 4%, 96% { opacity: 1; } 0% { offset-distance: 0%; } 100% { offset-distance: 100%; } }
 
 .masthead {
   position: absolute;
@@ -370,4 +386,5 @@ html[lang="en"] .eyebrow { font-family: "Equestria Display", Georgia, serif; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
   .map-ambience img { animation: none; }
+  .sea-waves, .neighagra-falls, .volcano-smoke, .rail-train { display: none; }
 }
