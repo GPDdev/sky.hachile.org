@@ -70,6 +70,26 @@ a { color: inherit; }
   background: linear-gradient(180deg, rgba(3, 12, 44, .12), transparent 18%, transparent 72%, rgba(3, 12, 44, .18));
 }
 
+.map-ambience { position: absolute; inset: 0; z-index: 1; overflow: hidden; pointer-events: none; }
+.map-ambience img { position: absolute; display: block; height: auto; user-select: none; }
+.drifting-cloud { width: 260px; opacity: .8; animation: cloud-drift 70s linear infinite; }
+.cloud-west { left: 11%; top: -2%; animation-delay: -8s; }
+.cloud-east { left: 55%; top: 2%; width: 210px; animation-delay: -37s; }
+.bobbing-boat { width: 130px; transform-origin: 52% 72%; animation: boat-bob 6s ease-in-out infinite; }
+.boat-east { left: 1520px; top: 482px; }
+.boat-south { left: 1215px; top: 765px; width: 135px; animation-delay: -3s; }
+
+@keyframes cloud-drift {
+  0% { transform: translateX(-180px); opacity: 0; }
+  8%, 88% { opacity: .8; }
+  100% { transform: translateX(340px); opacity: 0; }
+}
+
+@keyframes boat-bob {
+  0%, 100% { transform: translate(0, 0) rotate(-1deg); }
+  50% { transform: translate(6px, -4px) rotate(1deg); }
+}
+
 .masthead {
   position: absolute;
   z-index: 5;
@@ -343,4 +363,5 @@ html[lang="en"] .eyebrow { font-family: "Equestria Display", Georgia, serif; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
+  .map-ambience img { animation: none; }
 }
