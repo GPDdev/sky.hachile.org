@@ -56,7 +56,7 @@ a { color: inherit; }
   left: 0;
   width: 1920px;
   height: 1200px;
-  background: url("map.png") center / 100% 100% no-repeat;
+  background: url("map-clean.png") center / 100% 100% no-repeat;
   box-shadow: 0 0 80px rgba(0, 0, 0, .42);
   transform-origin: 0 0;
   will-change: transform;
@@ -221,6 +221,12 @@ a { color: inherit; }
 .place-baltimare .place-card { right: 32px; top: -18px; }
 .place-forbidden-jungle { left: 64.8%; top: 95.3%; }
 .place-forbidden-jungle .place-card { right: 32px; bottom: 23px; }
+.place-crystal-empire { left: 39.8%; top: 22.5%; }
+.place-crystal-empire .place-card { left: 32px; top: -18px; }
+.place-griffonstone { left: 89.5%; top: 55.2%; }
+.place-griffonstone .place-card { right: 32px; top: -18px; }
+.place-appleloosa { left: 40.2%; top: 75.6%; }
+.place-appleloosa .place-card { left: 32px; top: -18px; }
 
 .credits {
   position: absolute;
