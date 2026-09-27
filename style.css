@@ -271,6 +271,25 @@ a { color: inherit; }
 .music-links a:hover, .music-links a:focus-visible { color: var(--gold); }
 .music-links small { display: block; color: rgba(255, 255, 255, .58); font-size: 10px; }
 
+.single-player {
+  position: absolute;
+  z-index: 20;
+  left: clamp(12px, 2.4vw, 37px);
+  bottom: clamp(12px, 2.4vw, 37px);
+  width: min(400px, calc(100vw - 24px));
+  padding: 9px;
+  border: 1px solid rgba(255, 255, 255, .46);
+  border-radius: 5px 18px 5px 18px;
+  background: rgba(5, 25, 61, .92);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, .3);
+  backdrop-filter: blur(12px);
+  font: 12px/1.4 Arial, "Microsoft YaHei", sans-serif;
+}
+.single-player strong { display: block; margin: 0 0 6px 3px; color: var(--gold); }
+.single-player iframe { display: block; width: 100%; height: 120px; border: 0; background: #fff; }
+.single-player a { display: block; padding: 6px 3px 0; color: rgba(255, 255, 255, .76); text-align: right; text-decoration: none; }
+.single-player a:hover, .single-player a:focus-visible { color: var(--gold); }
+
 .credits {
   position: absolute;
   z-index: 10;
@@ -404,6 +423,7 @@ html[lang="en"] .eyebrow { font-family: "Equestria Display", Georgia, serif; }
   .language { min-width: 60px; padding: 8px 10px; }
   .credits { gap: 6px; max-width: calc(100vw - 24px); overflow-x: auto; font-size: 8px; }
   .credits > * + * { padding-left: 6px; }
+  .single-player { bottom: 104px; }
   .directory, .contact-grid { grid-template-columns: 1fr; }
   .sheet-head { padding: 24px 20px; }
   .sheet-head h2 { font-size: 28px; }
