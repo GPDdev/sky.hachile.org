@@ -52,6 +52,19 @@ a.route, .route summary { display: grid; grid-template-columns: 2.2rem 1fr auto;
 .privacy { margin-top: 1.6rem; padding: 1rem; border-top: 1px solid rgba(255,255,255,.2); color: rgba(255,255,255,.66); font-size: .75rem; line-height: 1.7; }
 .privacy summary { color: white; cursor: pointer; }
 .privacy a { color: #ffe17c; }
+.music-links { position: fixed; z-index: 10; right: 1rem; bottom: 1rem; width: min(20rem, calc(100vw - 2rem)); max-height: calc(100svh - 2rem); overflow-y: auto; border: 1px solid rgba(255,255,255,.45); border-radius: .35rem 1rem .35rem 1rem; background: rgba(5,24,58,.96); box-shadow: 0 .8rem 2rem rgba(0,0,0,.35); }
+.music-links summary { display: flex; align-items: center; gap: .5rem; padding: .75rem 1rem; list-style: none; cursor: pointer; font-size: .85rem; }
+.music-links summary::-webkit-details-marker { display: none; }
+.music-links summary span:first-child, .music-links summary span:last-child { color: #ffe17c; }
+.music-links summary span:first-child { font-size: 1.2rem; }
+.music-links summary span:last-child { margin-left: auto; }
+.music-links[open] summary { border-bottom: 1px solid rgba(255,255,255,.2); }
+.music-links p { margin: .75rem 1rem .5rem; color: rgba(255,255,255,.7); font-size: .7rem; line-height: 1.4; }
+.music-links ol { margin: 0; padding: 0 1rem .75rem 2.4rem; }
+.music-links li { padding: .25rem 0; font-size: .78rem; }
+.music-links li a { display: block; padding: .2rem 0; text-decoration: none; }
+.music-links li a:focus-visible { color: #ffe17c; }
+.music-links small { display: block; color: rgba(255,255,255,.58); font-size: .65rem; }
 footer { padding: 0 1rem 2rem; color: rgba(255,255,255,.55); font-size: .7rem; text-align: center; }
 footer a { color: white; }
 .toast { position: fixed; z-index: 10; left: 50%; bottom: 1.2rem; padding: .7rem 1rem; border: 1px solid rgba(255,255,255,.35); border-radius: 999px; background: rgba(5,24,58,.96); font-size: .78rem; opacity: 0; pointer-events: none; transform: translate(-50%, .7rem); transition: .2s; }
