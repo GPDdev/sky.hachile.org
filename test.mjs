@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { clampPan, fitCoverScale, languageForPath, mobileRoute, normalizeLanguage, translatedText } from "./app.js";
+import { clampPan, fitCoverScale, languageForPath, mobileRoute, normalizeLanguage, RAIL_ROUTES, translatedText } from "./app.js";
 
 test("language helpers always return a complete supported translation", () => {
   const copy = { zh: "中心城", en: "Canterlot" };
@@ -29,4 +29,12 @@ test("map fills its viewport and cannot be dragged beyond an edge", () => {
   assert.equal(fitCoverScale(1600, 900), 1600 / 1920);
   assert.equal(fitCoverScale(390, 844), 844 / 1200);
   assert.deepEqual(clampPan(50, -999, 1, 800, 600), { x: 0, y: -600 });
+});
+
+test("every requested train stop is connected by a visible railway trip", () => {
+  const stops = new Set(RAIL_ROUTES.flatMap(({ from, to }) => [from, to]));
+  for (const stop of ["Los Pegasus", "Mysterious South", "Appleloosa", "Dodge City", "Ponyville", "Canterlot", "Vanhoover", "Crystal Empire", "Manehattan", "Fillydelphia", "Baltimare", "Griffonstone Station"]) {
+    assert.ok(stops.has(stop), stop);
+  }
+  assert.ok(RAIL_ROUTES.every(({ path, seconds }) => /^M \d+ \d+ C /.test(path) && seconds > 0));
 });
