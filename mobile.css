@@ -13,7 +13,7 @@ body {
   color: white;
   background:
     linear-gradient(180deg, rgba(7, 24, 55, .18), #0b2247 37rem),
-    url("map.png") 40% top / auto 42rem no-repeat;
+    url("newnewmap.png") 40% top / auto 42rem no-repeat;
 }
 a { color: inherit; }
 button { color: inherit; font: inherit; }
@@ -35,6 +35,7 @@ a.route, .route summary { display: grid; grid-template-columns: 2.2rem 1fr auto;
 .number { color: #ffe17c; font: 700 .68rem/1 monospace; }
 .route span:nth-child(2) { display: grid; gap: .24rem; min-width: 0; }
 .route span > b { font: 500 1.45rem/1 "Equestria Display", Georgia, serif; letter-spacing: .025em; }
+:lang(zh) .route span > b, :lang(zh) .profile-copy .profile-lead { font-family: Arial, "Microsoft YaHei", sans-serif; }
 .route small { color: rgba(255,255,255,.68); font-size: .72rem; }
 .route i { color: #ffe17c; font-size: 1.25rem; font-style: normal; }
 .featured { border-color: rgba(255,225,124,.68); }

@@ -20,19 +20,18 @@ export function mobileRoute(pathname, isMobile) {
 export const MAP_WIDTH = 1920;
 export const MAP_HEIGHT = 1200;
 
-// Each trip follows one visible stretch of the map's railway and ends at the next named stop.
+// Traced against newnewmap.png: route endpoints sit on the visible rail, near each place.
 export const RAIL_ROUTES = [
-  { from: "Los Pegasus", to: "Appleloosa", path: "M 338 733 C 335 760 342 789 386 797 C 490 809 624 827 773 843", seconds: 31 },
+  { from: "Los Pegasus", to: "Ponyville", path: "M 338 790 C 336 762 335 738 340 717 C 347 679 375 646 410 640 C 451 638 473 655 502 667 C 529 678 555 679 581 665 C 612 654 647 669 671 685", seconds: 39 },
+  { from: "Ponyville", to: "Appleloosa", path: "M 671 685 C 630 693 601 706 590 727 C 579 749 611 771 651 794 C 692 818 737 835 774 843", seconds: 31 },
   { from: "Mysterious South", to: "Appleloosa", path: "M 786 1130 C 782 1060 781 973 778 890 C 777 870 775 851 773 843", seconds: 26 },
-  { from: "Appleloosa", to: "Dodge City", path: "M 773 843 C 831 845 882 837 956 840", seconds: 17 },
-  { from: "Los Pegasus", to: "Ponyville", path: "M 338 733 C 333 711 351 684 404 666 C 474 642 520 669 579 644 C 603 630 623 605 640 590", seconds: 29 },
-  { from: "Ponyville", to: "Canterlot", path: "M 640 590 C 674 573 704 569 740 553", seconds: 17 },
-  { from: "Vanhoover", to: "Canterlot", path: "M 225 486 C 281 493 318 504 361 481 C 380 517 434 520 501 518 C 591 523 664 544 740 553", seconds: 34 },
-  { from: "Crystal Empire", to: "Vanhoover", path: "M 765 321 C 707 332 630 330 572 329 C 530 328 510 346 512 384 C 511 412 452 425 397 429 C 343 433 340 451 361 481 C 325 493 279 490 225 486", seconds: 38 },
-  { from: "Canterlot", to: "Fillydelphia", path: "M 740 553 C 783 569 825 576 852 543 C 864 511 896 512 948 518 C 1048 530 1120 510 1192 531 C 1226 548 1217 608 1208 651", seconds: 36 },
-  { from: "Fillydelphia", to: "Baltimare", path: "M 1208 651 C 1218 701 1241 731 1262 764", seconds: 18 },
-  { from: "Manehattan", to: "Fillydelphia", path: "M 1367 517 C 1306 512 1251 524 1192 531 C 1216 558 1217 607 1208 651", seconds: 22 },
-  { from: "Griffonstone Station", to: "Manehattan", path: "M 1743 371 C 1692 353 1653 348 1604 346 C 1558 374 1510 423 1472 461 C 1442 492 1409 512 1367 517", seconds: 32 },
+  { from: "Appleloosa", to: "Dodge City", path: "M 774 843 C 813 838 855 840 902 845 C 932 846 959 845 982 844", seconds: 19 },
+  { from: "Vanhoover", to: "Canterlot", path: "M 224 481 C 271 487 304 491 334 481 C 354 473 379 473 394 490 C 419 516 452 515 490 517 C 530 518 558 527 580 544 C 629 569 680 579 741 579", seconds: 42 },
+  { from: "Crystal Empire", to: "Vanhoover", path: "M 746 320 C 685 329 635 326 590 328 C 542 326 517 340 513 376 C 509 404 480 417 440 424 C 392 432 355 418 348 441 C 339 460 351 477 371 486 C 328 493 275 489 224 481", seconds: 43 },
+  { from: "Canterlot", to: "Manehattan", path: "M 827 549 C 845 529 865 516 905 514 C 945 512 973 518 1006 529 C 1035 535 1053 526 1076 518 C 1122 511 1150 518 1184 526 C 1220 538 1254 541 1281 531 C 1315 520 1344 516 1371 527", seconds: 38 },
+  { from: "Canterlot", to: "Fillydelphia", path: "M 780 628 C 811 637 827 652 856 655 C 902 665 946 669 982 663 C 1018 661 1045 640 1072 630 C 1104 623 1124 633 1155 644 C 1178 651 1200 648 1213 645", seconds: 39 },
+  { from: "Canterlot", to: "Baltimare", path: "M 780 628 C 811 637 827 652 856 655 C 902 665 946 669 982 663 C 1009 661 1015 684 1012 704 C 1010 726 1045 738 1086 740 C 1151 745 1211 756 1260 765", seconds: 40 },
+  { from: "Crystal Mountains", to: "Griffonstone Station", path: "M 1016 309 C 1086 308 1109 291 1150 288 C 1185 287 1192 315 1230 316 C 1300 327 1389 326 1458 333 C 1507 330 1530 344 1578 347 C 1632 348 1694 350 1745 372", seconds: 47 },
 ];
 
 // Sprite sections run from the locomotive backwards through the tender and four coaches.
@@ -194,118 +193,46 @@ if (typeof document !== "undefined") {
   });
 
   const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
-  // Scan the open sea, excluding the waterfall and the volcano's illustrated smoke.
-  const sourceWaveAreas = [
-    [0, 330, 260, 325], [0, 820, 420, 393],
-    [1200, 470, 440, 743], [1640, 470, 280, 390], [1640, 1050, 280, 163],
-  ];
-  function prepareMapArtwork() {
-    const canvas = document.querySelector(".map-artwork");
-    const context = canvas.getContext("2d", { willReadFrequently: true });
-    const picture = new Image();
-    picture.onload = () => {
+  function prepareBoats() {
+    const load = (src) => new Promise((resolve, reject) => {
+      const picture = new Image();
+      picture.onload = () => resolve(picture);
+      picture.onerror = reject;
+      picture.src = src;
+    });
+    Promise.all([load("/newnewmap.png"), load("/map.png")]).then(([picture, original]) => {
+      const canvas = document.createElement("canvas");
+      canvas.width = MAP_WIDTH;
+      canvas.height = MAP_HEIGHT;
+      const context = canvas.getContext("2d", { willReadFrequently: true });
       context.drawImage(picture, 0, 0, MAP_WIDTH, MAP_HEIGHT);
       const source = context.getImageData(0, 0, MAP_WIDTH, MAP_HEIGHT);
-      const cleaned = context.createImageData(source);
-      cleaned.data.set(source.data);
-      const ambience = document.querySelector(".map-ambience");
-      const waves = context.createImageData(MAP_WIDTH, MAP_HEIGHT);
-      const isSea = (offset) => source.data[offset + 2] > source.data[offset + 1] + 6
-        && source.data[offset + 1] > source.data[offset] + 12
-        && source.data[offset] < 165;
-      const isOpenSea = (offset) => isSea(offset)
-        && isSea(offset - 64) && isSea(offset + 64)
-        && isSea(offset - 16 * MAP_WIDTH * 4)
-        && isSea(offset + 16 * MAP_WIDTH * 4);
-      function seaAround(position) {
-        const neighbors = [position - 96, position + 96,
-          position - 24 * MAP_WIDTH * 4, position + 24 * MAP_WIDTH * 4];
-        const sea = [0, 0, 0];
-        let count = 0;
-        for (const neighbor of neighbors) {
-          if (!isSea(neighbor)) continue;
-          count++;
-          for (let channel = 0; channel < 3; channel++) sea[channel] += source.data[neighbor + channel];
-        }
-        return count < 2 ? null : sea.map((value) => value / count);
-      }
-      for (const [x, sourceY, width, sourceHeight] of sourceWaveAreas) {
-        const y = Math.round(sourceY * MAP_HEIGHT / 1213);
-        const height = Math.round(sourceHeight * MAP_HEIGHT / 1213);
-        const hits = new Uint8Array(width * height);
+      context.clearRect(0, 0, MAP_WIDTH, MAP_HEIGHT);
+      context.drawImage(original, 0, 0, MAP_WIDTH, MAP_HEIGHT);
+      const old = context.getImageData(0, 0, MAP_WIDTH, MAP_HEIGHT);
+
+      // Exact ship pixels are the difference between the original and the ship-free map.
+      for (const [selector, x, y, width, height] of [
+        [".boat-east", 1562, 486, 60, 56], [".boat-south", 1267, 775, 62, 57],
+      ]) {
+        const boat = document.querySelector(selector);
+        boat.width = width;
+        boat.height = height;
+        const boatContext = boat.getContext("2d");
+        const sprite = boatContext.createImageData(width, height);
         for (let row = 0; row < height; row++) {
           for (let column = 0; column < width; column++) {
-            const position = ((y + row) * MAP_WIDTH + x + column) * 4;
-            const red = source.data[position];
-            const green = source.data[position + 1];
-            const blue = source.data[position + 2];
-            const sea = seaAround(position);
-            hits[row * width + column] = isOpenSea(position)
-              && blue > green + 8 && green > red + 8
-              && sea && red - sea[0] > 3 && green - sea[1] > 3 ? 1 : 0;
+            const from = ((y + row) * MAP_WIDTH + x + column) * 4;
+            const to = (row * width + column) * 4;
+            const delta = Math.max(...[0, 1, 2].map((channel) =>
+              Math.abs(old.data[from + channel] - source.data[from + channel])));
+            for (let channel = 0; channel < 3; channel++) sprite.data[to + channel] = old.data[from + channel];
+            sprite.data[to + 3] = Math.min(255, Math.max(0, (delta - 12) * 10));
           }
         }
-        for (let row = 2; row < height - 2; row++) {
-          for (let column = 2; column < width - 2; column++) {
-            let nearMark = false;
-            for (let dy = -2; dy <= 2 && !nearMark; dy++) {
-              for (let dx = -2; dx <= 2; dx++) {
-                if (hits[(row + dy) * width + column + dx]) { nearMark = true; break; }
-              }
-            }
-            if (!nearMark) continue;
-            const position = ((y + row) * MAP_WIDTH + x + column) * 4;
-            const sea = seaAround(position);
-            if (!sea || !isOpenSea(position)) continue;
-            for (let channel = 0; channel < 3; channel++) {
-              cleaned.data[position + channel] = sea[channel];
-              waves.data[position + channel] = source.data[position + channel];
-            }
-            waves.data[position + 3] = Math.min(210, Math.max(0,
-              (source.data[position] - sea[0]) * 7));
-          }
-        }
+        boatContext.putImageData(sprite, 0, 0);
       }
-      if (!reducedMotion.matches) {
-        const movingWaves = document.createElement("canvas");
-        movingWaves.width = MAP_WIDTH;
-        movingWaves.height = MAP_HEIGHT;
-        movingWaves.className = "map-waves";
-        movingWaves.getContext("2d").putImageData(waves, 0, 0);
-        ambience.prepend(movingWaves);
-      }
-
-      for (let row = 892; row < 962; row++) {
-        for (let column = 1672; column < 1852; column++) {
-          const position = (row * MAP_WIDTH + column) * 4;
-          const red = source.data[position];
-          const green = source.data[position + 1];
-          const blue = source.data[position + 2];
-          if (red < 106 || green < 166 || blue < 183) continue;
-          const left = (row * MAP_WIDTH + 1655) * 4;
-          const right = (row * MAP_WIDTH + 1860) * 4;
-          const across = (column - 1655) / 205;
-          for (let channel = 0; channel < 3; channel++) {
-            cleaned.data[position + channel] = source.data[left + channel] * (1 - across)
-              + source.data[right + channel] * across;
-          }
-        }
-      }
-      // The lower wisp crosses the island; sample grass, not sea, behind those pixels.
-      for (let row = 950; row < 1030; row++) {
-        for (let column = 1695; column < 1785; column++) {
-          const position = (row * MAP_WIDTH + column) * 4;
-          const red = source.data[position];
-          const green = source.data[position + 1];
-          const grass = (row * MAP_WIDTH + column + 70) * 4;
-          if (green < 170 || red - source.data[grass] < 8
-            || source.data[position + 2] - source.data[grass + 2] < 0) continue;
-          for (let channel = 0; channel < 3; channel++) cleaned.data[position + channel] = source.data[grass + channel];
-        }
-      }
-      context.putImageData(cleaned, 0, 0);
-    };
-    picture.src = "/map-clean.png";
+    }).catch((error) => console.warn("Boat artwork could not load", error));
   }
 
   function launchTrain() {
@@ -333,5 +260,5 @@ if (typeof document !== "undefined") {
 
   setLanguage(language);
   resetMap();
-  prepareMapArtwork();
+  prepareBoats();
 }

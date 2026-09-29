@@ -15,6 +15,7 @@
   --line: rgba(255, 255, 255, .38);
   font-family: Georgia, "Times New Roman", "Noto Serif SC", serif;
 }
+:root:lang(zh) { font-family: Arial, "Microsoft YaHei", sans-serif; }
 
 * { box-sizing: border-box; }
 
@@ -56,7 +57,7 @@ a { color: inherit; }
   left: 0;
   width: 1920px;
   height: 1200px;
-  background: url("map-clean.png") center / 100% 100% no-repeat;
+  background: url("newnewmap.png") center / 100% 100% no-repeat;
   box-shadow: 0 0 80px rgba(0, 0, 0, .42);
   transform-origin: 0 0;
   will-change: transform;
@@ -70,18 +71,19 @@ a { color: inherit; }
   background: linear-gradient(180deg, rgba(3, 12, 44, .12), transparent 18%, transparent 72%, rgba(3, 12, 44, .18));
 }
 
-.map-artwork { position: absolute; inset: 0; width: 100%; height: 100%; }
 .map-ambience { position: absolute; inset: 0; z-index: 1; overflow: hidden; pointer-events: none; }
-.map-ambience img { position: absolute; display: block; height: auto; user-select: none; }
+.map-ambience img, .map-ambience canvas.bobbing-boat { position: absolute; display: block; user-select: none; }
 .drifting-cloud { width: 260px; opacity: .8; animation: cloud-drift 70s linear infinite; }
 .cloud-west { left: 11%; top: -2%; animation-delay: -8s; }
 .cloud-east { left: 55%; top: 2%; width: 210px; animation-delay: -37s; }
-.bobbing-boat { width: 78px; transform-origin: 52% 72%; animation: boat-bob 6s ease-in-out infinite; }
-.boat-east { left: 1575px; top: 520px; }
-.boat-south { left: 1255px; top: 800px; width: 82px; animation-delay: -3s; }
-.map-waves { position: absolute; inset: 0; width: 1920px; height: 1200px; animation: wave-drift 14s linear infinite; }
+.bobbing-boat { transform-origin: 52% 72%; animation: boat-bob 6s ease-in-out infinite; }
+.boat-east { left: 1584px; top: 520px; width: 60px; height: 56px; }
+.boat-south { left: 1264px; top: 800px; width: 62px; height: 57px; animation-delay: -3s; }
 .neighagra-falls { position: absolute; left: 876px; top: 448px; width: 57px; height: 50px; border-radius: 4px 4px 24px 24px; background: repeating-linear-gradient(180deg, transparent 0 9px, rgba(228, 255, 255, .8) 10px 12px, transparent 13px 14px), repeating-linear-gradient(90deg, transparent 0 5px, rgba(219, 255, 255, .5) 6px 8px, transparent 9px 13px); background-size: 100% 14px, 100% 100%; opacity: .55; mix-blend-mode: screen; clip-path: polygon(4% 0, 95% 0, 92% 74%, 100% 94%, 68% 100%, 0 94%, 8% 72%); animation: waterfall-flow .65s linear infinite; }
-.volcano-smoke { position: absolute; left: 1683px; top: 892px; width: 190px; height: 100px; background: url("volcano-smoke.png") center / 220px 110px no-repeat; mask-image: linear-gradient(90deg, #000 0 68%, transparent 83%); transform-origin: 70% 85%; animation: smoke-sway 8s ease-in-out infinite; }
+.volcano-smoke { position: absolute; left: 1767px; top: 914px; width: 50px; height: 110px; }
+.volcano-smoke i { position: absolute; bottom: 0; left: 10px; width: 24px; height: 19px; border-radius: 50%; background: rgba(220, 242, 247, .73); filter: blur(5px); animation: smoke-rise 7s ease-out infinite; }
+.volcano-smoke i:nth-child(2) { left: 17px; animation-delay: -2.3s; }
+.volcano-smoke i:nth-child(3) { left: 7px; animation-delay: -4.6s; }
 .rail-car { position: absolute; z-index: 2; left: 0; top: 0; height: 38px; background: url("pony-train.png") no-repeat; background-size: 114px auto; filter: drop-shadow(0 2px 2px #13254599); offset-rotate: auto; offset-anchor: 50% 79%; animation: train-ride var(--trip-duration) linear both; }
 
 @keyframes cloud-drift {
@@ -94,9 +96,8 @@ a { color: inherit; }
   0%, 100% { transform: translate(0, 0) rotate(-1deg); }
   50% { transform: translate(6px, -4px) rotate(1deg); }
 }
-@keyframes wave-drift { 0% { transform: translateX(-10px); opacity: 0; } 15%, 75% { opacity: 1; } 100% { transform: translateX(55px); opacity: 0; } }
 @keyframes waterfall-flow { to { background-position: 0 14px, 0 0; } }
-@keyframes smoke-sway { 0% { transform: translate(-3px, 13px) rotate(-4deg) scale(.9); opacity: 0; } 17%, 67% { opacity: .9; } 55% { transform: translate(7px, -8px) rotate(4deg) scale(1.03); } 100% { transform: translate(-5px, -24px) rotate(-3deg) scale(1.12); opacity: 0; } }
+@keyframes smoke-rise { 0% { transform: translate(0, 0) scale(.7); opacity: 0; } 20% { opacity: .7; } 100% { transform: translate(-38px, -105px) scale(2.1); opacity: 0; } }
 @keyframes train-ride { 0%, 100% { opacity: 0; } 4%, 96% { opacity: 1; } 0% { offset-distance: 0%; } 100% { offset-distance: 100%; } }
 
 .masthead {
@@ -194,6 +195,7 @@ a { color: inherit; }
 }
 
 .place-card strong { font: 600 clamp(12px, 1.2vw, 21px)/1 "Equestria Display", Georgia, serif; letter-spacing: .02em; white-space: nowrap; }
+:lang(zh) .place-card strong { font-family: Arial, "Microsoft YaHei", sans-serif; }
 .place-card > span { margin-top: 2px; font: clamp(7px, .7vw, 12px)/1.3 Arial, "Microsoft YaHei", sans-serif; opacity: .9; }
 .place-card em { max-height: 0; margin-top: 0; overflow: hidden; color: var(--gold); font: 700 clamp(7px, .65vw, 11px)/1.35 Arial, "Microsoft YaHei", sans-serif; font-style: normal; opacity: 0; transition: max-height .2s, margin .2s, opacity .2s; }
 
@@ -425,6 +427,6 @@ html[lang="en"] .eyebrow { font-family: "Equestria Display", Georgia, serif; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
-  .map-ambience img { animation: none; }
-  .map-waves, .neighagra-falls, .volcano-smoke, .rail-car { display: none; }
+  .map-ambience img, .map-ambience .bobbing-boat { animation: none; }
+  .neighagra-falls, .volcano-smoke, .rail-car { display: none; }
 }

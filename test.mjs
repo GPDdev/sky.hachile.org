@@ -1,5 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import { clampPan, fitCoverScale, languageForPath, mobileRoute, normalizeLanguage, RAIL_ROUTES, TRAIN_SLICES, translatedText } from "./app.js";
 
 test("language helpers always return a complete supported translation", () => {
@@ -37,6 +38,16 @@ test("every requested train stop is connected by a visible railway trip", () => 
     assert.ok(stops.has(stop), stop);
   }
   assert.ok(RAIL_ROUTES.every(({ path, seconds }) => /^M \d+ \d+ C /.test(path) && seconds > 0));
+  assert.ok(RAIL_ROUTES.some(({ from, to }) => from === "Crystal Mountains" && to === "Griffonstone Station"));
+  assert.ok(!RAIL_ROUTES.some(({ from, to }) => [from, to].includes("Griffonstone Station") && [from, to].includes("Manehattan")));
+});
+
+test("the original supplied map is the background and both ship sources are deployed", () => {
+  assert.match(readFileSync(new URL("./style.css", import.meta.url), "utf8"), /background: url\("newnewmap\.png"\)/);
+  assert.doesNotMatch(readFileSync(new URL("./index.html", import.meta.url), "utf8"), /map-artwork|map-waves/);
+  assert.doesNotMatch(readFileSync(new URL("./app.js", import.meta.url), "utf8"), /map-artwork|map-waves|movingWaves/);
+  const workflow = readFileSync(new URL("./.github/workflows/pages.yml", import.meta.url), "utf8");
+  assert.match(workflow, /newnewmap\.png map\.png/);
 });
 
 test("the locomotive and five trailing cars are separate ordered sprite sections", () => {
