@@ -77,12 +77,12 @@ a { color: inherit; }
 .cloud-west { left: 11%; top: -2%; animation-delay: -8s; }
 .cloud-east { left: 55%; top: 2%; width: 210px; animation-delay: -37s; }
 .bobbing-boat { width: 78px; transform-origin: 52% 72%; animation: boat-bob 6s ease-in-out infinite; }
-.boat-east { left: 1520px; top: 482px; }
-.boat-south { left: 1215px; top: 765px; width: 82px; animation-delay: -3s; }
+.boat-east { left: 1575px; top: 520px; }
+.boat-south { left: 1255px; top: 800px; width: 82px; animation-delay: -3s; }
 .map-waves { position: absolute; inset: 0; width: 1920px; height: 1200px; animation: wave-drift 14s linear infinite; }
 .neighagra-falls { position: absolute; left: 876px; top: 448px; width: 57px; height: 50px; border-radius: 4px 4px 24px 24px; background: repeating-linear-gradient(180deg, transparent 0 9px, rgba(228, 255, 255, .8) 10px 12px, transparent 13px 14px), repeating-linear-gradient(90deg, transparent 0 5px, rgba(219, 255, 255, .5) 6px 8px, transparent 9px 13px); background-size: 100% 14px, 100% 100%; opacity: .55; mix-blend-mode: screen; clip-path: polygon(4% 0, 95% 0, 92% 74%, 100% 94%, 68% 100%, 0 94%, 8% 72%); animation: waterfall-flow .65s linear infinite; }
-.volcano-smoke { position: absolute; left: 1683px; top: 892px; width: 190px; height: 100px; background: url("volcano-smoke.png") center / 220px 110px no-repeat; transform-origin: 70% 85%; animation: smoke-sway 8s ease-in-out infinite; }
-.rail-train { position: absolute; z-index: 2; left: 0; top: 0; width: 108px; height: 37px; background: url("pony-train.png") center / 114px auto no-repeat; filter: drop-shadow(0 2px 2px #13254599); offset-rotate: auto; offset-anchor: 50% 86%; animation: train-ride var(--trip-duration, 28s) linear forwards; }
+.volcano-smoke { position: absolute; left: 1683px; top: 892px; width: 190px; height: 100px; background: url("volcano-smoke.png") center / 220px 110px no-repeat; mask-image: linear-gradient(90deg, #000 0 68%, transparent 83%); transform-origin: 70% 85%; animation: smoke-sway 8s ease-in-out infinite; }
+.rail-car { position: absolute; z-index: 2; left: 0; top: 0; height: 38px; background: url("pony-train.png") no-repeat; background-size: 114px auto; filter: drop-shadow(0 2px 2px #13254599); offset-rotate: auto; offset-anchor: 50% 79%; animation: train-ride var(--trip-duration) linear both; }
 
 @keyframes cloud-drift {
   0% { transform: translateX(-180px); opacity: 0; }
@@ -426,5 +426,5 @@ html[lang="en"] .eyebrow { font-family: "Equestria Display", Georgia, serif; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
   .map-ambience img { animation: none; }
-  .map-waves, .neighagra-falls, .volcano-smoke, .rail-train { display: none; }
+  .map-waves, .neighagra-falls, .volcano-smoke, .rail-car { display: none; }
 }

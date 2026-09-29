@@ -35,6 +35,12 @@ export const RAIL_ROUTES = [
   { from: "Griffonstone Station", to: "Manehattan", path: "M 1743 371 C 1692 353 1653 348 1604 346 C 1558 374 1510 423 1472 461 C 1442 492 1409 512 1367 517", seconds: 32 },
 ];
 
+// Sprite sections run from the locomotive backwards through the tender and four coaches.
+export const TRAIN_SLICES = [
+  [1608, 2132, 0], [1260, 1608, 23], [930, 1260, 41],
+  [650, 930, 57], [350, 650, 73], [45, 350, 89],
+];
+
 export function clamp(value, minimum, maximum) {
   return Math.min(maximum, Math.max(minimum, value));
 }
@@ -188,17 +194,10 @@ if (typeof document !== "undefined") {
   });
 
   const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
-  const waveAreas = [
-    [35, 334, 42, 23], [136, 348, 44, 23], [158, 370, 42, 24],
-    [34, 528, 55, 25], [26, 551, 55, 25], [79, 573, 58, 25],
-    [80, 877, 55, 23], [185, 863, 55, 24], [130, 921, 55, 25],
-    [205, 902, 55, 25], [34, 1062, 55, 25], [18, 1088, 55, 25],
-    [198, 1120, 55, 25], [323, 1155, 55, 25],
-    [1410, 488, 55, 22], [1382, 567, 55, 25], [1526, 607, 60, 25],
-    [1343, 825, 55, 24], [1648, 830, 52, 25], [1519, 871, 58, 25],
-    [1345, 892, 55, 27], [1454, 968, 60, 27], [1604, 981, 55, 25],
-    [1556, 1032, 55, 28], [1312, 1000, 50, 28], [1523, 1128, 50, 26],
-    [1779, 909, 60, 25], [1860, 957, 45, 28],
+  // Scan the open sea, excluding the waterfall and the volcano's illustrated smoke.
+  const sourceWaveAreas = [
+    [0, 330, 260, 325], [0, 820, 420, 393],
+    [1200, 470, 440, 743], [1640, 470, 280, 390], [1640, 1050, 280, 163],
   ];
   function prepareMapArtwork() {
     const canvas = document.querySelector(".map-artwork");
@@ -211,31 +210,59 @@ if (typeof document !== "undefined") {
       cleaned.data.set(source.data);
       const ambience = document.querySelector(".map-ambience");
       const waves = context.createImageData(MAP_WIDTH, MAP_HEIGHT);
-      for (const [x, y, width, height] of waveAreas) {
-        const corners = [
-          ((y - 5) * MAP_WIDTH + x - 5) * 4,
-          ((y - 5) * MAP_WIDTH + x + width + 5) * 4,
-          ((y + height + 5) * MAP_WIDTH + x - 5) * 4,
-          ((y + height + 5) * MAP_WIDTH + x + width + 5) * 4,
-        ];
+      const isSea = (offset) => source.data[offset + 2] > source.data[offset + 1] + 6
+        && source.data[offset + 1] > source.data[offset] + 12
+        && source.data[offset] < 165;
+      const isOpenSea = (offset) => isSea(offset)
+        && isSea(offset - 64) && isSea(offset + 64)
+        && isSea(offset - 16 * MAP_WIDTH * 4)
+        && isSea(offset + 16 * MAP_WIDTH * 4);
+      function seaAround(position) {
+        const neighbors = [position - 96, position + 96,
+          position - 24 * MAP_WIDTH * 4, position + 24 * MAP_WIDTH * 4];
+        const sea = [0, 0, 0];
+        let count = 0;
+        for (const neighbor of neighbors) {
+          if (!isSea(neighbor)) continue;
+          count++;
+          for (let channel = 0; channel < 3; channel++) sea[channel] += source.data[neighbor + channel];
+        }
+        return count < 2 ? null : sea.map((value) => value / count);
+      }
+      for (const [x, sourceY, width, sourceHeight] of sourceWaveAreas) {
+        const y = Math.round(sourceY * MAP_HEIGHT / 1213);
+        const height = Math.round(sourceHeight * MAP_HEIGHT / 1213);
+        const hits = new Uint8Array(width * height);
         for (let row = 0; row < height; row++) {
           for (let column = 0; column < width; column++) {
             const position = ((y + row) * MAP_WIDTH + x + column) * 4;
-            const across = (column + 5) / (width + 10);
-            const down = (row + 5) / (height + 10);
-            const water = [0, 1, 2].map((channel) => {
-              const top = source.data[corners[0] + channel] * (1 - across) + source.data[corners[1] + channel] * across;
-              const bottom = source.data[corners[2] + channel] * (1 - across) + source.data[corners[3] + channel] * across;
-              return top * (1 - down) + bottom * down;
-            });
-            const brightness = water.reduce((sum, value, channel) => sum + source.data[position + channel] - value, 0);
-            const mask = source.data[position + 2] > source.data[position] + 18
-              ? Math.min(1, Math.max(0, (brightness - 5) / 16)) : 0;
-            for (let channel = 0; channel < 3; channel++) {
-              waves.data[position + channel] = source.data[position + channel];
-              cleaned.data[position + channel] = source.data[position + channel] * (1 - mask) + water[channel] * mask;
+            const red = source.data[position];
+            const green = source.data[position + 1];
+            const blue = source.data[position + 2];
+            const sea = seaAround(position);
+            hits[row * width + column] = isOpenSea(position)
+              && blue > green + 8 && green > red + 8
+              && sea && red - sea[0] > 3 && green - sea[1] > 3 ? 1 : 0;
+          }
+        }
+        for (let row = 2; row < height - 2; row++) {
+          for (let column = 2; column < width - 2; column++) {
+            let nearMark = false;
+            for (let dy = -2; dy <= 2 && !nearMark; dy++) {
+              for (let dx = -2; dx <= 2; dx++) {
+                if (hits[(row + dy) * width + column + dx]) { nearMark = true; break; }
+              }
             }
-            waves.data[position + 3] = Math.round(mask * 210);
+            if (!nearMark) continue;
+            const position = ((y + row) * MAP_WIDTH + x + column) * 4;
+            const sea = seaAround(position);
+            if (!sea || !isOpenSea(position)) continue;
+            for (let channel = 0; channel < 3; channel++) {
+              cleaned.data[position + channel] = sea[channel];
+              waves.data[position + channel] = source.data[position + channel];
+            }
+            waves.data[position + 3] = Math.min(210, Math.max(0,
+              (source.data[position] - sea[0]) * 7));
           }
         }
       }
@@ -248,16 +275,32 @@ if (typeof document !== "undefined") {
         ambience.prepend(movingWaves);
       }
 
-      // Remove only the pale smoke pixels; the volcano and its shoreline stay untouched.
-      for (let row = 900; row < 977; row++) {
-        for (let column = 1680; column < 1858; column++) {
+      for (let row = 892; row < 962; row++) {
+        for (let column = 1672; column < 1852; column++) {
           const position = (row * MAP_WIDTH + column) * 4;
           const red = source.data[position];
           const green = source.data[position + 1];
           const blue = source.data[position + 2];
-          if (red < 112 || green < 169 || blue < green + 13) continue;
-          const water = (row * MAP_WIDTH + 1655) * 4;
-          for (let channel = 0; channel < 3; channel++) cleaned.data[position + channel] = source.data[water + channel];
+          if (red < 106 || green < 166 || blue < 183) continue;
+          const left = (row * MAP_WIDTH + 1655) * 4;
+          const right = (row * MAP_WIDTH + 1860) * 4;
+          const across = (column - 1655) / 205;
+          for (let channel = 0; channel < 3; channel++) {
+            cleaned.data[position + channel] = source.data[left + channel] * (1 - across)
+              + source.data[right + channel] * across;
+          }
+        }
+      }
+      // The lower wisp crosses the island; sample grass, not sea, behind those pixels.
+      for (let row = 950; row < 1030; row++) {
+        for (let column = 1695; column < 1785; column++) {
+          const position = (row * MAP_WIDTH + column) * 4;
+          const red = source.data[position];
+          const green = source.data[position + 1];
+          const grass = (row * MAP_WIDTH + column + 70) * 4;
+          if (green < 170 || red - source.data[grass] < 8
+            || source.data[position + 2] - source.data[grass + 2] < 0) continue;
+          for (let channel = 0; channel < 3; channel++) cleaned.data[position + channel] = source.data[grass + channel];
         }
       }
       context.putImageData(cleaned, 0, 0);
@@ -268,13 +311,22 @@ if (typeof document !== "undefined") {
   function launchTrain() {
     if (reducedMotion.matches || document.hidden) return;
     const route = RAIL_ROUTES[Math.floor(Math.random() * RAIL_ROUTES.length)];
-    const train = document.createElement("span");
-    train.className = "rail-train";
-    train.style.offsetPath = `path("${route.path}")`;
-    train.style.setProperty("--trip-duration", `${route.seconds}s`);
-    train.title = `${route.from} → ${route.to}`;
-    train.addEventListener("animationend", () => train.remove(), { once: true });
-    document.querySelector(".map-ambience").append(train);
+    const track = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    track.setAttribute("d", route.path);
+    const speed = track.getTotalLength() / route.seconds;
+    const ambience = document.querySelector(".map-ambience");
+    for (const [start, end, lag] of TRAIN_SLICES) {
+      const car = document.createElement("span");
+      car.className = "rail-car";
+      car.style.width = `${(end - start) * 114 / 2172}px`;
+      car.style.backgroundPositionX = `${-start * 114 / 2172}px`;
+      car.style.offsetPath = `path("${route.path}")`;
+      car.style.setProperty("--trip-duration", `${route.seconds}s`);
+      car.style.animationDelay = `${lag / speed}s`;
+      car.title = `${route.from} → ${route.to}`;
+      car.addEventListener("animationend", () => car.remove(), { once: true });
+      ambience.append(car);
+    }
   }
   setTimeout(launchTrain, 4000);
   setInterval(launchTrain, 44000);

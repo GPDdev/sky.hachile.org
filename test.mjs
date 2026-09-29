@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { clampPan, fitCoverScale, languageForPath, mobileRoute, normalizeLanguage, RAIL_ROUTES, translatedText } from "./app.js";
+import { clampPan, fitCoverScale, languageForPath, mobileRoute, normalizeLanguage, RAIL_ROUTES, TRAIN_SLICES, translatedText } from "./app.js";
 
 test("language helpers always return a complete supported translation", () => {
   const copy = { zh: "中心城", en: "Canterlot" };
@@ -37,4 +37,13 @@ test("every requested train stop is connected by a visible railway trip", () => 
     assert.ok(stops.has(stop), stop);
   }
   assert.ok(RAIL_ROUTES.every(({ path, seconds }) => /^M \d+ \d+ C /.test(path) && seconds > 0));
+});
+
+test("the locomotive and five trailing cars are separate ordered sprite sections", () => {
+  assert.equal(TRAIN_SLICES.length, 6);
+  assert.equal(TRAIN_SLICES[0][2], 0);
+  for (let i = 1; i < TRAIN_SLICES.length; i++) {
+    assert.equal(TRAIN_SLICES[i][1], TRAIN_SLICES[i - 1][0]);
+    assert.ok(TRAIN_SLICES[i][2] > TRAIN_SLICES[i - 1][2]);
+  }
 });
