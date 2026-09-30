@@ -13,7 +13,7 @@ body {
   color: white;
   background:
     linear-gradient(180deg, rgba(7, 24, 55, .18), #0b2247 37rem),
-    url("newnewmap.png") 40% top / auto 42rem no-repeat;
+    url("background.png") 40% top / auto 42rem no-repeat;
 }
 a { color: inherit; }
 button { color: inherit; font: inherit; }

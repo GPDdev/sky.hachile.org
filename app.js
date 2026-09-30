@@ -20,7 +20,7 @@ export function mobileRoute(pathname, isMobile) {
 export const MAP_WIDTH = 1920;
 export const MAP_HEIGHT = 1200;
 
-// Traced against newnewmap.png: route endpoints sit on the visible rail, near each place.
+// Traced against the map: route endpoints sit on the visible rail, near each place.
 export const RAIL_ROUTES = [
   { from: "Los Pegasus", to: "Ponyville", path: "M 338 790 C 336 762 335 738 340 717 C 347 679 375 646 410 640 C 451 638 473 655 502 667 C 529 678 555 679 581 665 C 612 654 647 669 671 685", seconds: 39 },
   { from: "Ponyville", to: "Appleloosa", path: "M 671 685 C 630 693 601 706 590 727 C 579 749 611 771 651 794 C 692 818 737 835 774 843", seconds: 31 },
@@ -193,46 +193,124 @@ if (typeof document !== "undefined") {
   });
 
   const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
-  function prepareBoats() {
-    const load = (src) => new Promise((resolve, reject) => {
-      const picture = new Image();
-      picture.onload = () => resolve(picture);
-      picture.onerror = reject;
-      picture.src = src;
-    });
-    Promise.all([load("/newnewmap.png"), load("/map.png")]).then(([picture, original]) => {
-      const canvas = document.createElement("canvas");
-      canvas.width = MAP_WIDTH;
-      canvas.height = MAP_HEIGHT;
-      const context = canvas.getContext("2d", { willReadFrequently: true });
-      context.drawImage(picture, 0, 0, MAP_WIDTH, MAP_HEIGHT);
-      const source = context.getImageData(0, 0, MAP_WIDTH, MAP_HEIGHT);
-      context.clearRect(0, 0, MAP_WIDTH, MAP_HEIGHT);
-      context.drawImage(original, 0, 0, MAP_WIDTH, MAP_HEIGHT);
-      const old = context.getImageData(0, 0, MAP_WIDTH, MAP_HEIGHT);
+  const loadImage = (src) => new Promise((resolve, reject) => {
+    const picture = new Image();
+    picture.onload = () => resolve(picture);
+    picture.onerror = reject;
+    picture.src = src;
+  });
 
-      // Exact ship pixels are the difference between the original and the ship-free map.
-      for (const [selector, x, y, width, height] of [
-        [".boat-east", 1562, 486, 60, 56], [".boat-south", 1267, 775, 62, 57],
-      ]) {
-        const boat = document.querySelector(selector);
-        boat.width = width;
-        boat.height = height;
-        const boatContext = boat.getContext("2d");
-        const sprite = boatContext.createImageData(width, height);
-        for (let row = 0; row < height; row++) {
-          for (let column = 0; column < width; column++) {
-            const from = ((y + row) * MAP_WIDTH + x + column) * 4;
-            const to = (row * width + column) * 4;
-            const delta = Math.max(...[0, 1, 2].map((channel) =>
-              Math.abs(old.data[from + channel] - source.data[from + channel])));
-            for (let channel = 0; channel < 3; channel++) sprite.data[to + channel] = old.data[from + channel];
-            sprite.data[to + 3] = Math.min(255, Math.max(0, (delta - 12) * 10));
-          }
+  function prepareBoats() {
+    loadImage("/boat.jpg").then((picture) => {
+      const canvas = document.createElement("canvas");
+      canvas.width = picture.width;
+      canvas.height = picture.height;
+      const context = canvas.getContext("2d", { willReadFrequently: true });
+      context.drawImage(picture, 0, 0);
+      const pixels = context.getImageData(0, 0, canvas.width, canvas.height);
+      const removed = new Uint8Array(canvas.width * canvas.height);
+      const queue = [];
+      const isWhite = (index) => {
+        const offset = index * 4;
+        const colors = pixels.data.subarray(offset, offset + 3);
+        return Math.min(...colors) > 218 && Math.max(...colors) - Math.min(...colors) < 25;
+      };
+      const enqueue = (index) => {
+        if (index < 0 || index >= removed.length || removed[index] || !isWhite(index)) return;
+        removed[index] = 1;
+        queue.push(index);
+      };
+      for (let x = 0; x < canvas.width; x++) {
+        enqueue(x);
+        enqueue((canvas.height - 1) * canvas.width + x);
+      }
+      for (let y = 0; y < canvas.height; y++) {
+        enqueue(y * canvas.width);
+        enqueue(y * canvas.width + canvas.width - 1);
+      }
+      for (let cursor = 0; cursor < queue.length; cursor++) {
+        const index = queue[cursor];
+        const x = index % canvas.width;
+        if (x > 0) enqueue(index - 1);
+        if (x < canvas.width - 1) enqueue(index + 1);
+        if (index >= canvas.width) enqueue(index - canvas.width);
+        if (index < removed.length - canvas.width) enqueue(index + canvas.width);
+      }
+      let left = canvas.width, top = canvas.height, right = 0, bottom = 0;
+      for (let index = 0; index < removed.length; index++) {
+        if (removed[index]) pixels.data[index * 4 + 3] = 0;
+        else {
+          const x = index % canvas.width, y = Math.floor(index / canvas.width);
+          left = Math.min(left, x); top = Math.min(top, y);
+          right = Math.max(right, x); bottom = Math.max(bottom, y);
         }
-        boatContext.putImageData(sprite, 0, 0);
+      }
+      context.putImageData(pixels, 0, 0);
+      for (const boat of document.querySelectorAll(".bobbing-boat")) {
+        boat.width = right - left + 1;
+        boat.height = bottom - top + 1;
+        boat.getContext("2d").drawImage(canvas, left, top, boat.width, boat.height, 0, 0, boat.width, boat.height);
       }
     }).catch((error) => console.warn("Boat artwork could not load", error));
+  }
+
+  function prepareWaves() {
+    loadImage("/newnewmap.png").then((picture) => {
+      const source = document.createElement("canvas");
+      source.width = MAP_WIDTH;
+      source.height = MAP_HEIGHT;
+      const context = source.getContext("2d", { willReadFrequently: true });
+      context.drawImage(picture, 0, 0, MAP_WIDTH, MAP_HEIGHT);
+      // Three original wave clusters, with only their pale strokes kept.
+      const sprites = [
+        [1412, 491, 54, 29], [1513, 607, 63, 31], [1455, 964, 56, 31],
+      ].map(([x, y, width, height]) => {
+        const sprite = document.createElement("canvas");
+        sprite.width = width;
+        sprite.height = height;
+        const pixels = context.getImageData(x, y, width, height);
+        const red = [], green = [];
+        for (let offset = 0; offset < pixels.data.length; offset += 4) {
+          red.push(pixels.data[offset]);
+          green.push(pixels.data[offset + 1]);
+        }
+        red.sort((a, b) => a - b);
+        green.sort((a, b) => a - b);
+        const baseRed = red[Math.floor(red.length * .35)];
+        const baseGreen = green[Math.floor(green.length * .35)];
+        for (let offset = 0; offset < pixels.data.length; offset += 4) {
+          const lift = Math.min(pixels.data[offset] - baseRed, pixels.data[offset + 1] - baseGreen);
+          pixels.data[offset + 3] = Math.min(255, Math.max(0, (lift - 5) * 16));
+        }
+        sprite.getContext("2d").putImageData(pixels, 0, 0);
+        return sprite.toDataURL("image/png");
+      });
+      const lanes = [
+        [510, 590, 1415, 1580], [590, 730, 1370, 1580],
+        [730, 830, 1400, 1560], [830, 880, 1430, 1600],
+        [880, 940, 1430, 1710], [940, 990, 1430, 1630],
+        [990, 1030, 1430, 1550],
+      ];
+      const ambience = document.querySelector(".map-ambience");
+      const spawn = () => {
+        if (!document.hidden && !reducedMotion.matches) {
+          const [top, bottom, left, right] = lanes[Math.floor(Math.random() * lanes.length)];
+          const variant = Math.floor(Math.random() * sprites.length);
+          const wave = document.createElement("img");
+          wave.className = "drifting-wave";
+          wave.src = sprites[variant];
+          wave.alt = "";
+          wave.style.left = `${left}px`;
+          wave.style.top = `${top + Math.random() * (bottom - top)}px`;
+          wave.style.setProperty("--wave-distance", `${right - left - [54, 63, 56][variant]}px`);
+          wave.style.setProperty("--wave-duration", `${14 + Math.random() * 7}s`);
+          wave.addEventListener("animationend", () => wave.remove(), { once: true });
+          ambience.append(wave);
+        }
+        setTimeout(spawn, 2600 + Math.random() * 2800);
+      };
+      setTimeout(spawn, 700);
+    }).catch((error) => console.warn("Wave artwork could not load", error));
   }
 
   function launchTrain() {
@@ -261,4 +339,5 @@ if (typeof document !== "undefined") {
   setLanguage(language);
   resetMap();
   prepareBoats();
+  prepareWaves();
 }

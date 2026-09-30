@@ -42,12 +42,16 @@ test("every requested train stop is connected by a visible railway trip", () => 
   assert.ok(!RAIL_ROUTES.some(({ from, to }) => [from, to].includes("Griffonstone Station") && [from, to].includes("Manehattan")));
 });
 
-test("the original supplied map is the background and both ship sources are deployed", () => {
-  assert.match(readFileSync(new URL("./style.css", import.meta.url), "utf8"), /background: url\("newnewmap\.png"\)/);
+test("the new background, supplied boat, and three original wave shapes are deployed", () => {
+  assert.match(readFileSync(new URL("./style.css", import.meta.url), "utf8"), /background: url\("background\.png"\)/);
+  assert.match(readFileSync(new URL("./mobile.css", import.meta.url), "utf8"), /url\("background\.png"\)/);
   assert.doesNotMatch(readFileSync(new URL("./index.html", import.meta.url), "utf8"), /map-artwork|map-waves/);
-  assert.doesNotMatch(readFileSync(new URL("./app.js", import.meta.url), "utf8"), /map-artwork|map-waves|movingWaves/);
+  const app = readFileSync(new URL("./app.js", import.meta.url), "utf8");
+  assert.match(app, /loadImage\("\/boat\.jpg"\)/);
+  assert.match(app, /\[1412, 491, 54, 29\], \[1513, 607, 63, 31\], \[1455, 964, 56, 31\]/);
+  assert.doesNotMatch(app, /map-artwork|map-waves|movingWaves/);
   const workflow = readFileSync(new URL("./.github/workflows/pages.yml", import.meta.url), "utf8");
-  assert.match(workflow, /newnewmap\.png map\.png/);
+  assert.match(workflow, /background\.png boat\.jpg newnewmap\.png/);
 });
 
 test("the locomotive and five trailing cars are separate ordered sprite sections", () => {

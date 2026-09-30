@@ -57,7 +57,7 @@ a { color: inherit; }
   left: 0;
   width: 1920px;
   height: 1200px;
-  background: url("newnewmap.png") center / 100% 100% no-repeat;
+  background: url("background.png") center / 100% 100% no-repeat;
   box-shadow: 0 0 80px rgba(0, 0, 0, .42);
   transform-origin: 0 0;
   will-change: transform;
@@ -79,6 +79,7 @@ a { color: inherit; }
 .bobbing-boat { transform-origin: 52% 72%; animation: boat-bob 6s ease-in-out infinite; }
 .boat-east { left: 1584px; top: 520px; width: 60px; height: 56px; }
 .boat-south { left: 1264px; top: 800px; width: 62px; height: 57px; animation-delay: -3s; }
+.drifting-wave { position: absolute; pointer-events: none; animation: wave-sail var(--wave-duration) linear both; }
 .neighagra-falls { position: absolute; left: 876px; top: 448px; width: 57px; height: 50px; border-radius: 4px 4px 24px 24px; background: repeating-linear-gradient(180deg, transparent 0 9px, rgba(228, 255, 255, .8) 10px 12px, transparent 13px 14px), repeating-linear-gradient(90deg, transparent 0 5px, rgba(219, 255, 255, .5) 6px 8px, transparent 9px 13px); background-size: 100% 14px, 100% 100%; opacity: .55; mix-blend-mode: screen; clip-path: polygon(4% 0, 95% 0, 92% 74%, 100% 94%, 68% 100%, 0 94%, 8% 72%); animation: waterfall-flow .65s linear infinite; }
 .volcano-smoke { position: absolute; left: 1767px; top: 914px; width: 50px; height: 110px; }
 .volcano-smoke i { position: absolute; bottom: 0; left: 10px; width: 24px; height: 19px; border-radius: 50%; background: rgba(220, 242, 247, .73); filter: blur(5px); animation: smoke-rise 7s ease-out infinite; }
@@ -95,6 +96,11 @@ a { color: inherit; }
 @keyframes boat-bob {
   0%, 100% { transform: translate(0, 0) rotate(-1deg); }
   50% { transform: translate(6px, -4px) rotate(1deg); }
+}
+@keyframes wave-sail {
+  0% { transform: translateX(0); opacity: 0; }
+  10%, 85% { opacity: .85; }
+  100% { transform: translateX(var(--wave-distance)); opacity: 0; }
 }
 @keyframes waterfall-flow { to { background-position: 0 14px, 0 0; } }
 @keyframes smoke-rise { 0% { transform: translate(0, 0) scale(.7); opacity: 0; } 20% { opacity: .7; } 100% { transform: translate(-38px, -105px) scale(2.1); opacity: 0; } }
@@ -428,5 +434,6 @@ html[lang="en"] .eyebrow { font-family: "Equestria Display", Georgia, serif; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
   .map-ambience img, .map-ambience .bobbing-boat { animation: none; }
+  .drifting-wave { display: none; }
   .neighagra-falls, .volcano-smoke, .rail-car { display: none; }
 }
