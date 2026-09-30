@@ -348,6 +348,7 @@ a { color: inherit; }
 html[lang="en"] .sheet-head h2,
 html[lang="en"] .sheet-body h3,
 html[lang="en"] .eyebrow { font-family: "Equestria Display", Georgia, serif; }
+html[lang="en"] :is(.masthead h1, .place-card strong, .sheet-head h2, .sheet-body h3, .eyebrow) { font-weight: 400; font-synthesis: none; }
 .close { flex: 0 0 auto; width: 42px; height: 42px; border: 1px solid rgba(255, 255, 255, .42); border-radius: 50%; background: rgba(0, 0, 0, .12); font: 28px/1 Arial, sans-serif; cursor: pointer; }
 .close:hover { color: var(--gold); border-color: var(--gold); transform: rotate(4deg); }
 

@@ -44,6 +44,7 @@ a.route, .route summary { display: grid; grid-template-columns: 2.2rem 1fr auto;
 .profile-copy { padding-left: 1rem; }
 .profile-copy p { margin: 0; color: rgba(255,255,255,.78); font-size: .8rem; line-height: 1.75; letter-spacing: 0; }
 .profile-copy .profile-lead { color: #ffe17c; font: 500 1rem/1.4 "Equestria Display", Georgia, serif; letter-spacing: .04em; }
+html[lang="en"] :is(.hero h1, .route span > b, .profile-copy .profile-lead) { font-weight: 400; font-synthesis: none; }
 .route-body button, .route-body > a { display: flex; justify-content: space-between; gap: .7rem; width: 100%; padding: .7rem; border: 1px solid rgba(255,255,255,.16); border-radius: .45rem; background: rgba(255,255,255,.06); text-align: left; text-decoration: none; }
 .route-body button b, .route-body > a b { flex: 0 0 auto; color: #ffe17c; font: .68rem/1.4 monospace; }
 .route-body button span { font-size: .73rem; line-height: 1.4; }
