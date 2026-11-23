@@ -10,18 +10,21 @@
   <title>Welcome to my Wonderland</title>
   <link rel="icon" type="image/png" href="/favicon.png">
   <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/fx-water.css">
+  <link rel="stylesheet" href="/fx-air-sea.css">
+  <link rel="stylesheet" href="/fx-train.css">
 </head>
 <body>
   <main class="atlas" aria-label="Skyblue 的小马国导航地图">
     <div class="map-viewport" tabindex="0" role="application" aria-label="可缩放、可拖动的小马国地图">
       <div class="map-world" role="img" aria-label="小马国地图，标出了通往 Skyblue 各类信息的城市">
       <div class="map-ambience" aria-hidden="true">
-        <img class="drifting-cloud cloud-west" src="/cloud-drift.png" alt="">
-        <img class="drifting-cloud cloud-east" src="/cloud-drift.png" alt="">
-        <canvas class="bobbing-boat boat-east" aria-hidden="true"></canvas>
-        <canvas class="bobbing-boat boat-south" aria-hidden="true"></canvas>
+        <span class="drifting-cloud cloud-west"></span>
+        <span class="drifting-cloud cloud-east"></span>
+        <span class="bobbing-boat boat-east"></span>
+        <span class="bobbing-boat boat-south"></span>
         <div class="neighagra-falls"></div>
-        <div class="volcano-smoke"><i></i><i></i><i></i></div>
+        <div class="volcano-smoke"></div>
       </div>
       <a class="place place-canterlot" href="https://home.hachile.org/" aria-label="Canterlot 中心城：网站交通枢纽">
         <span class="place-glow" aria-hidden="true"></span>

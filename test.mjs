@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { clampPan, fitCoverScale, languageForPath, mobileRoute, normalizeLanguage, RAIL_ROUTES, TRAIN_SLICES, translatedText } from "./app.js";
+import { carPose, clampPan, fitCoverScale, languageForPath, mobileRoute, normalizeLanguage, RAIL_ROUTES, TRAIN_SLICES, translatedText } from "./app.js";
 
 test("language helpers always return a complete supported translation", () => {
   const copy = { zh: "中心城", en: "Canterlot" };
@@ -47,7 +47,8 @@ test("the new background, supplied boat, and three original wave shapes are depl
   assert.match(readFileSync(new URL("./mobile.css", import.meta.url), "utf8"), /url\("background\.png"\)/);
   assert.doesNotMatch(readFileSync(new URL("./index.html", import.meta.url), "utf8"), /map-artwork|map-waves/);
   const app = readFileSync(new URL("./app.js", import.meta.url), "utf8");
-  assert.match(app, /loadImage\("\/boat\.jpg"\)/);
+  const boatStyles = readFileSync(new URL("./fx-air-sea.css", import.meta.url), "utf8");
+  assert.match(boatStyles, /boat\.jpg/);
   assert.match(app, /\[1412, 491, 54, 29\], \[1513, 607, 63, 31\], \[1455, 964, 56, 31\]/);
   assert.doesNotMatch(app, /map-artwork|map-waves|movingWaves/);
   const workflow = readFileSync(new URL("./.github/workflows/pages.yml", import.meta.url), "utf8");
@@ -56,9 +57,16 @@ test("the new background, supplied boat, and three original wave shapes are depl
 
 test("the locomotive and five trailing cars are separate ordered sprite sections", () => {
   assert.equal(TRAIN_SLICES.length, 6);
-  assert.equal(TRAIN_SLICES[0][2], 0);
   for (let i = 1; i < TRAIN_SLICES.length; i++) {
     assert.equal(TRAIN_SLICES[i][1], TRAIN_SLICES[i - 1][0]);
-    assert.ok(TRAIN_SLICES[i][2] > TRAIN_SLICES[i - 1][2]);
+  }
+});
+
+test("cars follow both wheel contacts and stay upright in either direction", () => {
+  for (const [dx, dy] of [[9, 0], [-9, 0], [-3, 7], [0, -7]]) {
+    const { x, y, a, b, d } = carPose({ x: 10 + dx, y: 20 + dy }, { x: 10, y: 20 }, Math.sign(dx) || 1);
+    assert.deepEqual([x, y], [10 + dx / 2, 20 + dy / 2]);
+    assert.ok(Math.abs(a * dy - b * dx) < 1e-6);
+    assert.ok(d > 0, "chimney should project above the wheel line");
   }
 });

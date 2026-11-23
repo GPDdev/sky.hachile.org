@@ -1,0 +1,31 @@
+.rail-trip {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+.rail-car {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform-origin: 0 0;
+  background-image: url("pony-train.png");
+  background-repeat: no-repeat;
+  filter: saturate(.84) contrast(.96) drop-shadow(0 .65px .55px #25392f66);
+}
+.rail-steam {
+  position: absolute;
+  width: 6px;
+  height: 4px;
+  border-radius: 55% 65% 42% 58%;
+  background: #f6eedb;
+  box-shadow: 1px -1px 0 #f7f3e4, -1.5px 0 0 #e9e6d7;
+  animation: rail-chuff 1.65s ease-out both;
+}
+@keyframes rail-chuff {
+  from { transform: translate(-50%, -55%) scale(.45); opacity: .8; }
+  to   { transform: translate(-7px, -14px) scale(1.65); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .rail-trip { display: none; }
+}

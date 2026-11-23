@@ -1,0 +1,22 @@
+/* Draw in the 1920 × 1200 map's coordinate space. */
+.neighagra-falls {
+  position: absolute;
+  left: 800.6px;
+  top: 405.6px;
+  width: 155.7px;
+  height: 105.9px;
+  background: url("fx/falls.svg") center / 100% 100% no-repeat;
+}
+
+.volcano-smoke {
+  position: absolute;
+  left: 1621px;
+  top: 905px;
+  width: 186px;
+  height: 110px;
+  background: url("fx/crater-plume.svg") center / contain no-repeat;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .neighagra-falls, .volcano-smoke { display: none; }
+}

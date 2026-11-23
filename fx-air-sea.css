@@ -1,0 +1,78 @@
+/* The two masks follow cloud outlines in background.png at its native 1578 × 997. */
+.drifting-cloud {
+  position: absolute;
+  display: block;
+  background-image: url("/background.png");
+  background-repeat: no-repeat;
+  mask: var(--cloud-mask) center / 100% 100% no-repeat;
+  animation: sky-breeze var(--crossing-time) linear infinite;
+}
+
+.cloud-west {
+  --cloud-mask: url("/fx/cloud-west-mask.svg");
+  --crossing-time: 117s;
+  --travel: 442px;
+  --visibility: .72;
+  left: 22%; top: 1%;
+  width: 108px; aspect-ratio: 120 / 45;
+  background-size: 1315% 2215.5556%; background-position: 11.5912% 1.4706%;
+  animation-delay: -49s;
+}
+
+.cloud-east {
+  --cloud-mask: url("/fx/cloud-east-mask.svg");
+  --crossing-time: 91s;
+  --travel: 510px;
+  --visibility: .84;
+  left: 65%; top: 3.6%;
+  width: 124px; aspect-ratio: 134 / 54;
+  background-size: 1177.6119% 1846.2963%; background-position: 74.723% .7423%;
+  animation-delay: -13s;
+}
+
+@keyframes sky-breeze {
+  0% { transform: translate(0, 2px); opacity: 0; }
+  13%, 83% { opacity: var(--visibility); }
+  48% { transform: translate(calc(var(--travel) * .48), -3px); }
+  100% { transform: translate(var(--travel), 0); opacity: 0; }
+}
+
+.bobbing-boat { display: block; position: absolute; animation: none; }
+.boat-east { left: 1584px; top: 520px; width: 60px; height: 56px; --swell: 7.2s; --phase: -1s; }
+.boat-south { left: 1264px; top: 800px; width: 62px; height: 57px; --swell: 8.7s; --phase: -5s; }
+
+/* Render the supplied JPEG through a rigging-aware matte, with a separate waterline. */
+.bobbing-boat::after {
+  content: "";
+  position: absolute;
+  inset: 2% 4%;
+  background: url("/boat.jpg") 58.6207% 48.4848% / 211.5385% 237.5% no-repeat;
+  mask: url("/fx/boat-mask.svg") center / 100% 100% no-repeat;
+  transform-origin: 53% 89%;
+  animation: hull-swell var(--swell) ease-in-out var(--phase) infinite;
+}
+.bobbing-boat::before {
+  content: "";
+  position: absolute;
+  left: 18%; right: 13%; bottom: 5%;
+  height: 8%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, #2458757a, #24587514 62%, transparent 72%);
+  border-bottom: 1px solid #d3f3f690;
+  animation: hull-waterline var(--swell) ease-in-out var(--phase) infinite;
+}
+@keyframes hull-swell {
+  0%, 100% { transform: translate(-.5px, .3px) rotate(-1.6deg); }
+  32% { transform: translate(.4px, -1.4px) rotate(.7deg); }
+  59% { transform: translate(1px, -.3px) rotate(1.8deg); }
+  82% { transform: translate(0, .8px) rotate(-.3deg); }
+}
+@keyframes hull-waterline {
+  0%, 100% { transform: scaleX(.92); opacity: .68; }
+  32% { transform: scaleX(1.13); opacity: .45; }
+  82% { transform: scaleX(.9); opacity: .85; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .drifting-cloud { display: none; }
+  .bobbing-boat::before, .bobbing-boat::after { animation: none; }
+}

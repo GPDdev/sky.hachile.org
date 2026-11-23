@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-16 0 186 110">
+  <defs>
+    <linearGradient id="ash" x1="0" x2=".32" y1="0" y2="1" gradientUnits="objectBoundingBox">
+      <stop stop-color="#f0ece0"/>
+      <stop offset=".6" stop-color="#cbd2d5"/>
+      <stop offset="1" stop-color="#98a6b3"/>
+    </linearGradient>
+    <linearGradient id="vent" x1="0" y1="1" x2="0" y2="0" gradientUnits="objectBoundingBox">
+      <stop stop-color="#f1c588"/>
+      <stop offset=".36" stop-color="#d8c2a9"/>
+      <stop offset="1" stop-color="#b5c2cc"/>
+    </linearGradient>
+    <path id="wind" d="M125 102 C124 93 122 83 112 76 C104 71 102 62 88 54 C77 47 70 44 59 40 C39 34 23 26 13 17"/>
+    <g id="nimbus">
+      <path d="M-19 4 C-23 0 -21 -7 -15 -9 C-15 -16 -6 -20 0 -15 C5 -19 13 -16 14 -10 C22 -10 25 -4 22 2 C24 8 17 13 11 12 C8 18 1 19 -4 14 C-11 17 -17 13 -17 9 Q-22 9 -19 4Z" fill="url(#ash)"/>
+      <path d="M-19 4 Q-15 9 -10 6 C-8 13 0 15 4 10 C10 14 16 9 16 6 Q21 6 23 0 C25 8 17 13 11 12 C8 18 1 19 -4 14 C-11 17 -17 13 -17 9 Q-22 9 -19 4Z" fill="#96a5b2" opacity=".55"/>
+      <path d="M-14 -8 Q-12 -15 -6 -15 Q-2 -15 0 -12 Q-5 -14 -10 -10 Q-12 -8 -14 -8Z" fill="#fff7e6" opacity=".72"/>
+    </g>
+    <g id="roll">
+      <path d="M-20 0 C-23 -5 -19 -12 -13 -12 Q-9 -19 -3 -16 C4 -22 13 -17 13 -10 C20 -10 24 -5 21 2 C26 9 18 15 12 13 C8 19 2 17 -3 15 C-8 19 -16 15 -16 10 Q-24 9 -20 0Z" fill="url(#ash)"/>
+      <path d="M-20 0 Q-17 7 -11 5 Q-12 12 -4 13 Q2 14 4 9 Q10 14 16 7 Q21 8 22 3 C24 10 18 15 12 13 C8 19 2 17 -3 15 C-8 19 -16 15 -16 10 Q-24 9 -20 0Z" fill="#9ca9b5" opacity=".59"/>
+      <path d="M-17 -8 Q-13 -14 -9 -12 Q-7 -16 -3 -15 Q-4 -11 -9 -10 Q-13 -11 -17 -8Z" fill="#fff6e5" opacity=".65"/>
+    </g>
+  </defs>
+  <!-- Seven staggered ash billows grow and cool as they clear the vent. -->
+  <path fill="url(#vent)" opacity=".45" d="M124 105 Q126 94 117 86 Q109 85 110 79 Q102 79 103 73 Q96 74 93 66 Q86 65 83 60 Q73 61 72 54 Q62 57 57 49 Q52 47 48 42 Q59 37 70 40 Q76 37 81 44 Q91 44 94 51 Q103 52 103 59 Q113 59 112 67 Q119 68 119 75 Q124 76 123 82 Q130 88 127 96 L127 105Z"/>
+  <g>
+    <animateMotion dur="8.05s" begin="-6.9s" repeatCount="indefinite"><mpath href="#wind"/></animateMotion>
+    <use href="#nimbus" opacity="0">
+      <animateTransform attributeName="transform" type="scale" values=".15 .25;.42 .53;.73 .83;1.02 1.05;1.23 1.13" keyTimes="0;.22;.48;.75;1" dur="8.05s" begin="-6.9s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values=".04;.92;.91;.75;.46;0" keyTimes="0;.1;.34;.57;.78;1" dur="8.05s" begin="-6.9s" repeatCount="indefinite"/>
+    </use>
+  </g>
+  <g>
+    <animateMotion dur="8.05s" begin="-5.75s" repeatCount="indefinite"><mpath href="#wind"/></animateMotion>
+    <use href="#roll" opacity="0">
+      <animateTransform attributeName="transform" type="scale" values=".15 .25;.42 .53;.73 .83;1.02 1.05;1.23 1.13" keyTimes="0;.22;.48;.75;1" dur="8.05s" begin="-5.75s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values=".04;.92;.91;.75;.46;0" keyTimes="0;.1;.34;.57;.78;1" dur="8.05s" begin="-5.75s" repeatCount="indefinite"/>
+    </use>
+  </g>
+  <g>
+    <animateMotion dur="8.05s" begin="-4.6s" repeatCount="indefinite"><mpath href="#wind"/></animateMotion>
+    <use href="#nimbus" opacity="0">
+      <animateTransform attributeName="transform" type="scale" values=".15 .25;.42 .53;.73 .83;1.02 1.05;1.23 1.13" keyTimes="0;.22;.48;.75;1" dur="8.05s" begin="-4.6s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values=".04;.92;.91;.75;.46;0" keyTimes="0;.1;.34;.57;.78;1" dur="8.05s" begin="-4.6s" repeatCount="indefinite"/>
+    </use>
+  </g>
+  <g>
+    <animateMotion dur="8.05s" begin="-3.45s" repeatCount="indefinite"><mpath href="#wind"/></animateMotion>
+    <use href="#roll" opacity="0">
+      <animateTransform attributeName="transform" type="scale" values=".15 .25;.42 .53;.73 .83;1.02 1.05;1.23 1.13" keyTimes="0;.22;.48;.75;1" dur="8.05s" begin="-3.45s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values=".04;.92;.91;.75;.46;0" keyTimes="0;.1;.34;.57;.78;1" dur="8.05s" begin="-3.45s" repeatCount="indefinite"/>
+    </use>
+  </g>
+  <g>
+    <animateMotion dur="8.05s" begin="-2.3s" repeatCount="indefinite"><mpath href="#wind"/></animateMotion>
+    <use href="#nimbus" opacity="0">
+      <animateTransform attributeName="transform" type="scale" values=".15 .25;.42 .53;.73 .83;1.02 1.05;1.23 1.13" keyTimes="0;.22;.48;.75;1" dur="8.05s" begin="-2.3s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values=".04;.92;.91;.75;.46;0" keyTimes="0;.1;.34;.57;.78;1" dur="8.05s" begin="-2.3s" repeatCount="indefinite"/>
+    </use>
+  </g>
+  <g>
+    <animateMotion dur="8.05s" begin="-1.15s" repeatCount="indefinite"><mpath href="#wind"/></animateMotion>
+    <use href="#roll" opacity="0">
+      <animateTransform attributeName="transform" type="scale" values=".15 .25;.42 .53;.73 .83;1.02 1.05;1.23 1.13" keyTimes="0;.22;.48;.75;1" dur="8.05s" begin="-1.15s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values=".04;.92;.91;.75;.46;0" keyTimes="0;.1;.34;.57;.78;1" dur="8.05s" begin="-1.15s" repeatCount="indefinite"/>
+    </use>
+  </g>
+  <g>
+    <animateMotion dur="8.05s" begin="0s" repeatCount="indefinite"><mpath href="#wind"/></animateMotion>
+    <use href="#nimbus" opacity="0">
+      <animateTransform attributeName="transform" type="scale" values=".15 .25;.42 .53;.73 .83;1.02 1.05;1.23 1.13" keyTimes="0;.22;.48;.75;1" dur="8.05s" begin="0s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values=".04;.92;.91;.75;.46;0" keyTimes="0;.1;.34;.57;.78;1" dur="8.05s" begin="0s" repeatCount="indefinite"/>
+    </use>
+  </g>
+  <path fill="url(#vent)" opacity=".85" d="M123 108 Q128 102 123 96 Q119 91 122 85 Q121 81 117 78 C122 80 128 83 126 89 Q125 93 128 97 Q131 102 127 108Z">
+    <animate attributeName="d" dur="2.7s" repeatCount="indefinite" values="M123 108 Q128 102 123 96 Q119 91 122 85 Q121 81 117 78 C122 80 128 83 126 89 Q125 93 128 97 Q131 102 127 108Z;M123 108 Q124 102 122 97 Q119 92 120 86 Q121 82 117 78 C123 79 126 82 125 88 Q123 94 127 97 Q130 101 127 108Z;M123 108 Q128 102 123 96 Q119 91 122 85 Q121 81 117 78 C122 80 128 83 126 89 Q125 93 128 97 Q131 102 127 108Z"/>
+  </path>
+</svg>

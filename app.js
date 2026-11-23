@@ -20,25 +20,54 @@ export function mobileRoute(pathname, isMobile) {
 export const MAP_WIDTH = 1920;
 export const MAP_HEIGHT = 1200;
 
-// Traced against the map: route endpoints sit on the visible rail, near each place.
+// Survey points on the printed rail centreline in 1920 × 1200 map coordinates.
+function trip(from, to, seconds, survey, tunnels = []) {
+  const p = survey.split(" ").map(pair => pair.split(",").map(Number));
+  let path = `M ${p[0].join(" ")}`;
+  for (let i = 1; i < p.length; i++) {
+    const a = p[i - 1], b = p[i], prev = p[i - 2] || a, next = p[i + 1] || b;
+    const handles = [0, 1].map(k => a[k] + (b[k] - prev[k]) / 6);
+    handles.push(...[0, 1].map(k => b[k] - (next[k] - a[k]) / 6));
+    path += ` C ${handles.map(v => v.toFixed(1)).join(" ")} ${b.join(" ")}`;
+  }
+  return { from, to, seconds, path, tunnels };
+}
+
+const westOfCanterlot = "370,463 383,471 395,490 408,505 428,514 467,513 515,516 551,520 581,527 601,543 615,556 642,563 678,566 705,570 728,580 744,589";
+const southOfCanterlot = "842,626 855,634 874,653 894,663 925,667 959,669";
+const ghastlyGorge = "590,736 596,748 611,759 641,775 663,792 697,815 730,828";
 export const RAIL_ROUTES = [
-  { from: "Los Pegasus", to: "Ponyville", path: "M 338 790 C 336 762 335 738 340 717 C 347 679 375 646 410 640 C 451 638 473 655 502 667 C 529 678 555 679 581 665 C 612 654 647 669 671 685", seconds: 39 },
-  { from: "Ponyville", to: "Appleloosa", path: "M 671 685 C 630 693 601 706 590 727 C 579 749 611 771 651 794 C 692 818 737 835 774 843", seconds: 31 },
-  { from: "Mysterious South", to: "Appleloosa", path: "M 786 1130 C 782 1060 781 973 778 890 C 777 870 775 851 773 843", seconds: 26 },
-  { from: "Appleloosa", to: "Dodge City", path: "M 774 843 C 813 838 855 840 902 845 C 932 846 959 845 982 844", seconds: 19 },
-  { from: "Vanhoover", to: "Canterlot", path: "M 224 481 C 271 487 304 491 334 481 C 354 473 379 473 394 490 C 419 516 452 515 490 517 C 530 518 558 527 580 544 C 629 569 680 579 741 579", seconds: 42 },
-  { from: "Crystal Empire", to: "Vanhoover", path: "M 746 320 C 685 329 635 326 590 328 C 542 326 517 340 513 376 C 509 404 480 417 440 424 C 392 432 355 418 348 441 C 339 460 351 477 371 486 C 328 493 275 489 224 481", seconds: 43 },
-  { from: "Canterlot", to: "Manehattan", path: "M 827 549 C 845 529 865 516 905 514 C 945 512 973 518 1006 529 C 1035 535 1053 526 1076 518 C 1122 511 1150 518 1184 526 C 1220 538 1254 541 1281 531 C 1315 520 1344 516 1371 527", seconds: 38 },
-  { from: "Canterlot", to: "Fillydelphia", path: "M 780 628 C 811 637 827 652 856 655 C 902 665 946 669 982 663 C 1018 661 1045 640 1072 630 C 1104 623 1124 633 1155 644 C 1178 651 1200 648 1213 645", seconds: 39 },
-  { from: "Canterlot", to: "Baltimare", path: "M 780 628 C 811 637 827 652 856 655 C 902 665 946 669 982 663 C 1009 661 1015 684 1012 704 C 1010 726 1045 738 1086 740 C 1151 745 1211 756 1260 765", seconds: 40 },
-  { from: "Crystal Mountains", to: "Griffonstone Station", path: "M 1016 309 C 1086 308 1109 291 1150 288 C 1185 287 1192 315 1230 316 C 1300 327 1389 326 1458 333 C 1507 330 1530 344 1578 347 C 1632 348 1694 350 1745 372", seconds: 47 },
+  trip("Los Pegasus", "Ponyville", 34, "337,793 335,781 338,758 337,744 328,728 329,723 341,718 346,707 356,705 384,705 416,699 442,692 454,684 466,671 483,666 508,667 535,666 565,672 623,682 660,688", [[566,665]]),
+  trip("Ponyville", "Appleloosa", 30, `658,690 633,697 611,706 595,715 591,723 ${ghastlyGorge} 748,839 758,853 763,867 764,882 773,896 778,908`),
+  trip("Mysterious South", "Appleloosa", 24, "785,1144 785,1129 792,1108 792,1091 787,1062 787,1034 786,1018 779,999 783,977 780,959 773,946 774,929 778,909 775,898 766,886 763,873"),
+  trip("Dodge City", "Ponyville", 34, "962,855 941,855 911,851 878,840 848,833 821,831 798,832 758,834 730,828 697,815 663,792 641,775 611,759 596,748 590,736 591,723 595,715 611,706 633,697 658,690"),
+  trip("Vanhoover", "Canterlot", 39, `239,483 263,479 284,479 306,487 321,486 336,470 353,465 ${westOfCanterlot}`, [[602,611]]),
+  trip("Crystal Empire", "Canterlot", 45, `751,318 723,318 601,326 583,329 552,338 528,344 516,358 511,380 504,393 426,417 388,424 361,432 349,440 349,448 356,456 ${westOfCanterlot}`, [[428,503,440],[602,723,380]]),
+  trip("Canterlot", "Manehattan", 36, "834,582 847,575 857,563 862,549 868,538 887,527 911,517 931,516 955,517 984,520 1004,521 1039,517 1069,512 1097,515 1104,517 1206,526 1229,533 1248,532 1265,525 1290,511 1308,506 1332,506", [[1103,1205]]),
+  trip("Canterlot", "Fillydelphia", 27, `${southOfCanterlot} 976,657 997,643 1011,639 1037,640 1060,649 1073,649 1092,645 1105,644 1129,650 1150,653 1169,653`),
+  trip("Canterlot", "Baltimare", 34, `${southOfCanterlot} 977,672 997,681 1011,694 1012,708 1018,719 1038,730 1066,737 1091,738 1118,738 1142,744 1167,752 1200,757 1235,760 1253,761`),
+  trip("Crystal Mountains", "Griffonstone Station", 46, "1020,307 1050,307 1087,304 1125,296 1154,298 1181,292 1204,283 1230,282 1249,287 1263,301 1284,308 1318,312 1355,320 1390,323 1436,323 1452,322 1541,326 1571,335 1604,347 1620,353 1659,353 1697,351 1720,354 1735,361 1746,373 1747,386 1742,406 1743,426 1750,441", [[1451,1541]]),
 ];
 
-// Sprite sections run from the locomotive backwards through the tender and four coaches.
+// The original artwork is 2172 × 724; wheel rims touch row 568.
+const TRAIN_SCALE = .058;
+const TRAIN_TOP = 137;
+const WHEEL_LINE = 568;
 export const TRAIN_SLICES = [
-  [1608, 2132, 0], [1260, 1608, 23], [930, 1260, 41],
-  [650, 930, 57], [350, 650, 73], [45, 350, 89],
+  [1610, 2127], [1260, 1610], [933, 1260], [650, 933], [345, 650], [48, 345],
 ];
+
+// Two points on the rail define each car's rigid wheelbase, including on bends.
+export function carPose(front, rear, facing) {
+  const dx = front.x - rear.x, dy = front.y - rear.y;
+  const span = Math.hypot(dx, dy) || 1;
+  const along = dx / span, slope = dy / span;
+  return {
+    x: (front.x + rear.x) / 2, y: (front.y + rear.y) / 2,
+    // Steep rails lean into the perspective of the illustration. Roofs stay above the wheels.
+    a: along, b: slope, c: -slope * facing * .52, d: .82 + .18 * Math.abs(along),
+  };
+}
 
 export function clamp(value, minimum, maximum) {
   return Math.min(maximum, Math.max(minimum, value));
@@ -200,59 +229,6 @@ if (typeof document !== "undefined") {
     picture.src = src;
   });
 
-  function prepareBoats() {
-    loadImage("/boat.jpg").then((picture) => {
-      const canvas = document.createElement("canvas");
-      canvas.width = picture.width;
-      canvas.height = picture.height;
-      const context = canvas.getContext("2d", { willReadFrequently: true });
-      context.drawImage(picture, 0, 0);
-      const pixels = context.getImageData(0, 0, canvas.width, canvas.height);
-      const removed = new Uint8Array(canvas.width * canvas.height);
-      const queue = [];
-      const isWhite = (index) => {
-        const offset = index * 4;
-        const colors = pixels.data.subarray(offset, offset + 3);
-        return Math.min(...colors) > 218 && Math.max(...colors) - Math.min(...colors) < 25;
-      };
-      const enqueue = (index) => {
-        if (index < 0 || index >= removed.length || removed[index] || !isWhite(index)) return;
-        removed[index] = 1;
-        queue.push(index);
-      };
-      for (let x = 0; x < canvas.width; x++) {
-        enqueue(x);
-        enqueue((canvas.height - 1) * canvas.width + x);
-      }
-      for (let y = 0; y < canvas.height; y++) {
-        enqueue(y * canvas.width);
-        enqueue(y * canvas.width + canvas.width - 1);
-      }
-      for (let cursor = 0; cursor < queue.length; cursor++) {
-        const index = queue[cursor];
-        const x = index % canvas.width;
-        if (x > 0) enqueue(index - 1);
-        if (x < canvas.width - 1) enqueue(index + 1);
-        if (index >= canvas.width) enqueue(index - canvas.width);
-        if (index < removed.length - canvas.width) enqueue(index + canvas.width);
-      }
-      let left = canvas.width, top = canvas.height, right = 0, bottom = 0;
-      for (let index = 0; index < removed.length; index++) {
-        if (removed[index]) pixels.data[index * 4 + 3] = 0;
-        else {
-          const x = index % canvas.width, y = Math.floor(index / canvas.width);
-          left = Math.min(left, x); top = Math.min(top, y);
-          right = Math.max(right, x); bottom = Math.max(bottom, y);
-        }
-      }
-      context.putImageData(pixels, 0, 0);
-      for (const boat of document.querySelectorAll(".bobbing-boat")) {
-        boat.width = right - left + 1;
-        boat.height = bottom - top + 1;
-        boat.getContext("2d").drawImage(canvas, left, top, boat.width, boat.height, 0, 0, boat.width, boat.height);
-      }
-    }).catch((error) => console.warn("Boat artwork could not load", error));
-  }
 
   function prepareWaves() {
     loadImage("/newnewmap.png").then((picture) => {
@@ -313,31 +289,84 @@ if (typeof document !== "undefined") {
     }).catch((error) => console.warn("Wave artwork could not load", error));
   }
 
+  let activeTrain;
   function launchTrain() {
-    if (reducedMotion.matches || document.hidden) return;
+    if (activeTrain || reducedMotion.matches || document.hidden) return;
     const route = RAIL_ROUTES[Math.floor(Math.random() * RAIL_ROUTES.length)];
     const track = document.createElementNS("http://www.w3.org/2000/svg", "path");
     track.setAttribute("d", route.path);
-    const speed = track.getTotalLength() / route.seconds;
-    const ambience = document.querySelector(".map-ambience");
-    for (const [start, end, lag] of TRAIN_SLICES) {
-      const car = document.createElement("span");
-      car.className = "rail-car";
-      car.style.width = `${(end - start) * 114 / 2172}px`;
-      car.style.backgroundPositionX = `${-start * 114 / 2172}px`;
-      car.style.offsetPath = `path("${route.path}")`;
-      car.style.setProperty("--trip-duration", `${route.seconds}s`);
-      car.style.animationDelay = `${lag / speed}s`;
-      car.title = `${route.from} → ${route.to}`;
-      car.addEventListener("animationend", () => car.remove(), { once: true });
-      ambience.append(car);
+    const length = track.getTotalLength();
+    // Cache the expensive SVG measurements once; interpolate between two-pixel samples.
+    const count = Math.ceil(length / 2);
+    const points = Array.from({ length: count + 1 }, (_, i) => track.getPointAtLength(i * length / count));
+    function pointAt(distance) {
+      const sample = clamp(distance * count / length, 0, count);
+      const i = Math.min(count - 1, Math.floor(sample)), t = sample - i;
+      return { x: points[i].x * (1 - t) + points[i + 1].x * t, y: points[i].y * (1 - t) + points[i + 1].y * t };
     }
+    const consist = document.createElement("div");
+    consist.className = "rail-trip";
+    if (route.tunnels.length) {
+      const holes = route.tunnels.map(([x1, x2, floor = MAP_HEIGHT]) => `M${x1} 0H${x2}V${floor}H${x1}Z`);
+      consist.style.clipPath = `path(evenodd, "M0 0H${MAP_WIDTH}V${MAP_HEIGHT}H0Z ${holes.join(" ")}")`;
+    }
+    let trainLength = 0;
+    const cars = TRAIN_SLICES.map(([left, right]) => {
+      const node = document.createElement("span");
+      const width = (right - left) * TRAIN_SCALE;
+      const offset = trainLength + width / 2;
+      trainLength += width;
+      node.className = "rail-car";
+      node.style.width = `${width}px`;
+      node.style.height = `${(WHEEL_LINE - TRAIN_TOP + 2) * TRAIN_SCALE}px`;
+      node.style.backgroundSize = `${2172 * TRAIN_SCALE}px auto`;
+      node.style.backgroundPosition = `${-left * TRAIN_SCALE}px ${-TRAIN_TOP * TRAIN_SCALE}px`;
+      consist.append(node);
+      return { node, width, offset, facing: Math.sign(points[count].x - points[0].x) || 1 };
+    });
+    document.querySelector(".map-ambience").append(consist);
+    activeTrain = consist;
+    const started = performance.now();
+    let lastChuff = -Infinity;
+    function frame(now) {
+      const t = clamp((now - started) / (route.seconds * 1000), 0, 1);
+      if (t === 1 || reducedMotion.matches || document.hidden) {
+        consist.remove();
+        activeTrain = null;
+        return;
+      }
+      // Ease the whole consist together. Each carriage retains a fixed coupling distance.
+      const travel = (length + trainLength) * (t - .65 * Math.sin(2 * Math.PI * t) / (2 * Math.PI));
+      for (const car of cars) {
+        const station = travel - car.offset;
+        car.node.hidden = station <= 0 || station >= length;
+        if (car.node.hidden) continue;
+        const front = pointAt(station + car.width * .30), rear = pointAt(station - car.width * .30);
+        if (Math.abs(front.x - rear.x) > car.width * .2) car.facing = Math.sign(front.x - rear.x);
+        const { x, y, a, b, c, d } = carPose(front, rear, car.facing);
+        const wheelY = (WHEEL_LINE - TRAIN_TOP) * TRAIN_SCALE;
+        car.node.style.transform = `matrix(${a},${b},${c},${d},${x - a * car.width / 2 - c * wheelY},${y - b * car.width / 2 - d * wheelY})`;
+        car.node.style.opacity = clamp(Math.min(station, length - station) / car.width, 0, 1);
+        car.node.style.zIndex = Math.round(y);
+        if (car === cars[0] && station > car.width && length - station > car.width && now - lastChuff > 860) {
+          const steam = document.createElement("span");
+          steam.className = "rail-steam";
+          const chimneyX = car.width * .25, chimneyY = -wheelY * .95;
+          steam.style.left = `${x + a * chimneyX + c * chimneyY}px`;
+          steam.style.top = `${y + b * chimneyX + d * chimneyY}px`;
+          steam.addEventListener("animationend", () => steam.remove(), { once: true });
+          consist.append(steam);
+          lastChuff = now;
+        }
+      }
+      requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
   }
   setTimeout(launchTrain, 4000);
   setInterval(launchTrain, 44000);
 
   setLanguage(language);
   resetMap();
-  prepareBoats();
   prepareWaves();
 }

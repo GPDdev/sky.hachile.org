@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 88" fill="none">
+  <!-- Highlights pass over the two painted water curtains and disappear into their pools. -->
+  <defs>
+    <clipPath id="curtains">
+      <path d="M98 16 Q99 11 105 11 L111 11 Q104 13 106 18 L106 31 Q102 29 97 30 Z"/>
+      <path d="M63 39 Q63 35 69 34 L78 34 Q79 37 86 39 Q97 42 107 40 L107 58 Q101 56 98 59 Q95 56 92 60 Q87 54 80 58 Q75 53 73 58 Q67 51 62 55 Z"/>
+    </clipPath>
+    <style>
+      .fast path { stroke-dasharray: 5 19; animation: fall .94s linear infinite; }
+      .slow path { stroke-dasharray: 2.8 21.2; animation: fall 1.26s linear -.54s infinite; }
+      path:nth-child(2) { animation-delay: -.27s; }
+      path:nth-child(3) { animation-delay: -.75s; }
+      path:nth-child(4) { animation-delay: -.12s; }
+      path:nth-child(5) { animation-delay: -.61s; }
+      .foam { transform-box: fill-box; transform-origin: center; animation: foam 2.4s ease-out infinite; }
+      @keyframes fall { from { stroke-dashoffset: 0; } to { stroke-dashoffset: -24; } }
+      @keyframes foam {
+        0% { opacity: 0; transform: translateY(-.7px) scaleX(.75); }
+        22% { opacity: .67; }
+        100% { opacity: 0; transform: translateY(1.6px) scaleX(1.2); }
+      }
+    </style>
+  </defs>
+  <g clip-path="url(#curtains)" stroke="#e5ffff" stroke-width=".72" stroke-linecap="round">
+    <g class="fast" opacity=".7">
+      <path d="M110 11 Q101 11 101 18 L101 32"/>
+      <path d="M72 34 Q66 35 66 43 L65.7 61"/>
+      <path d="M78 34 Q75 36 75 45 L74.7 61" stroke-dashoffset="12"/>
+      <path d="M89 38 Q88 41 88 46 L87.8 64" stroke-dashoffset="8"/>
+      <path d="M100 39 Q99 42 99 47 L99.1 64" stroke-dashoffset="17"/>
+    </g>
+    <g class="slow" opacity=".52">
+      <path d="M110 12 Q104 14 104 19 L104.2 33"/>
+      <path d="M74 34 Q70 36 70 44 L69.7 60"/>
+      <path d="M83 36 Q81 39 81 48 L81 60" stroke-dashoffset="14"/>
+      <path d="M94 38 Q94 42 94 49 L94 64" stroke-dashoffset="7"/>
+      <path d="M105 39 L104.2 64" stroke-dashoffset="11"/>
+    </g>
+  </g>
+  <g fill="#d6f8f5">
+    <path d="M59 59 Q60 55 63 56 Q66 52 69 54 Q72 54 73 58 Q67 56 65 59Z">
+      <animate attributeName="d" values="M59 59 Q60 55 63 56 Q66 52 69 54 Q72 54 73 58 Q67 56 65 59Z;M59 59 Q60 58 64 57 Q66 55 69 55 Q72 56 73 58 Q68 57 65 59Z;M59 59 Q60 55 63 56 Q66 52 69 54 Q72 54 73 58 Q67 56 65 59Z" dur="1.7s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values=".65;.24;.65" dur="1.7s" repeatCount="indefinite"/>
+    </path>
+    <g>
+      <circle r=".73"><animateMotion dur="1.4s" path="M72 56 Q76 45 78 57" repeatCount="indefinite"/><animate attributeName="opacity" values="0;.78;0" dur="1.4s" repeatCount="indefinite"/></circle>
+      <circle r=".55"><animateMotion dur="1.05s" path="M103 31 Q106 25 108 32" repeatCount="indefinite"/><animate attributeName="opacity" values="0;.65;0" dur="1.05s" repeatCount="indefinite"/></circle>
+      <circle r=".65"><animateMotion dur="1.65s" path="M96 59 Q99 50 102 59" repeatCount="indefinite"/><animate attributeName="opacity" values="0;.74;0" dur="1.65s" repeatCount="indefinite"/></circle>
+    </g>
+  </g>
+  <g stroke="#edffff" stroke-linecap="round" stroke-width=".8">
+    <path class="foam" d="M91 34 Q95 35.5 99 35 Q101 34.5 103 35"/>
+    <path class="foam" style="animation-delay:-.82s" d="M53 64 Q58 65.5 65 64.3 Q68 64 71 65"/>
+    <path class="foam" style="animation-delay:-1.65s" d="M84 66 Q89 67.6 94 66.3 Q99 65.4 103 66.5"/>
+  </g>
+</svg>
